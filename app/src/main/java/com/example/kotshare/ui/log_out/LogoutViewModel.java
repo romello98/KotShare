@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.tools;
+package com.example.kotshare.ui.log_out;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -2,15 +2,13 @@
     <string name="app_name">KotShare</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">KotShare</string>
+    <string name="nav_header_subtitle">info@kotshare.be</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Réglages</string>
 
     <string name="menu_home">Accueil</string>
-    <string name="menu_added_student_rooms">Mes biens ajoutés</string>
+    <string name="menu_my_student_rooms">Mes kots</string>
     <string name="menu_likes">Mes favoris</string>
     <string name="menu_logout">Déconnexion</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
 </resources>

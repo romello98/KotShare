@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.slideshow;
+package com.example.kotshare.ui.likes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

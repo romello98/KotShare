@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.kotshare.R;
 
-public class AddedStudentRoomsFragment extends Fragment {
+public class MyStudentRoomsFragment extends Fragment {
 
-    private AddedStudentRoomsViewModel addedStudentRoomsViewModel;
+    private MyStudentRoomsViewModel myStudentRoomsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        addedStudentRoomsViewModel =
-                ViewModelProviders.of(this).get(AddedStudentRoomsViewModel.class);
+        myStudentRoomsViewModel =
+                ViewModelProviders.of(this).get(MyStudentRoomsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_student_rooms, container, false);
         final TextView textView = root.findViewById(R.id.text_added_student_rooms);
-        addedStudentRoomsViewModel.getText().observe(this, new Observer<String>() {
+        myStudentRoomsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

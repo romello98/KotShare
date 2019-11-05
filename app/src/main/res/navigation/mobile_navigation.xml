@@ -12,32 +12,20 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.kotshare.ui.gallery.AddedStudentRoomsFragment"
-        android:label="@string/menu_added_student_rooms"
-        tools:layout="@layout/fragment_added_student_rooms" />
+        android:id="@+id/nav_likes"
+        android:name="com.example.kotshare.ui.my_student_rooms.MyStudentRoomsFragment"
+        android:label="@string/menu_my_student_rooms"
+        tools:layout="@layout/fragment_my_student_rooms" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.kotshare.ui.slideshow.LikesFragment"
+        android:id="@+id/nav_my_student_rooms"
+        android:name="com.example.kotshare.ui.likes.LikesFragment"
         android:label="@string/menu_likes"
         tools:layout="@layout/fragment_likes" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.example.kotshare.ui.tools.LogoutFragment"
+        android:id="@+id/nav_logout"
+        android:name="com.example.kotshare.ui.log_out.LogoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
-
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="com.example.kotshare.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
-
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.example.kotshare.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
 </navigation>

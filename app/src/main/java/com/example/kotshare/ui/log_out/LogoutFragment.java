@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.tools;
+package com.example.kotshare.ui.log_out;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

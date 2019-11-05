@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class AddedStudentRoomsViewModel extends ViewModel {
+public class MyStudentRoomsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public AddedStudentRoomsViewModel() {
+    public MyStudentRoomsViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }
