@@ -23,13 +23,6 @@ public class LikesFragment extends Fragment {
         likesViewModel =
                 ViewModelProviders.of(this).get(LikesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_likes, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        likesViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 }

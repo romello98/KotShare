@@ -8,7 +8,7 @@
     <string name="action_settings">Réglages</string>
 
     <string name="menu_home">Accueil</string>
-    <string name="menu_my_student_rooms">Mes kots</string>
     <string name="menu_likes">Mes favoris</string>
+    <string name="menu_my_student_rooms">Mes kots</string>
     <string name="menu_logout">Déconnexion</string>
 </resources>

@@ -23,13 +23,6 @@ public class MyStudentRoomsFragment extends Fragment {
         myStudentRoomsViewModel =
                 ViewModelProviders.of(this).get(MyStudentRoomsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_student_rooms, container, false);
-        final TextView textView = root.findViewById(R.id.text_added_student_rooms);
-        myStudentRoomsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 }

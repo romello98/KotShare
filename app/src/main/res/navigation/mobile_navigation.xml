@@ -13,15 +13,15 @@
 
     <fragment
         android:id="@+id/nav_likes"
-        android:name="com.example.kotshare.ui.my_student_rooms.MyStudentRoomsFragment"
-        android:label="@string/menu_my_student_rooms"
-        tools:layout="@layout/fragment_my_student_rooms" />
-
-    <fragment
-        android:id="@+id/nav_my_student_rooms"
         android:name="com.example.kotshare.ui.likes.LikesFragment"
         android:label="@string/menu_likes"
         tools:layout="@layout/fragment_likes" />
+
+    <fragment
+        android:id="@+id/nav_my_student_rooms"
+        android:name="com.example.kotshare.ui.my_student_rooms.MyStudentRoomsFragment"
+        android:label="@string/menu_my_student_rooms"
+        tools:layout="@layout/fragment_my_student_rooms" />
 
     <fragment
         android:id="@+id/nav_logout"
