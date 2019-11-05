@@ -13,21 +13,21 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.kotshare.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="com.example.kotshare.ui.gallery.AddedStudentRoomsFragment"
+        android:label="@string/menu_added_student_rooms"
+        tools:layout="@layout/fragment_added_student_rooms" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.kotshare.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="com.example.kotshare.ui.slideshow.LikesFragment"
+        android:label="@string/menu_likes"
+        tools:layout="@layout/fragment_likes" />
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="com.example.kotshare.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:name="com.example.kotshare.ui.tools.LogoutFragment"
+        android:label="@string/menu_logout"
+        tools:layout="@layout/fragment_logout" />
 
     <fragment
         android:id="@+id/nav_share"

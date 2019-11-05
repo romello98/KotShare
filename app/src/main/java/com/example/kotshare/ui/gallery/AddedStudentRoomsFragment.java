@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.tools;
+package com.example.kotshare.ui.gallery;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.kotshare.R;
 
-public class ToolsFragment extends Fragment {
+public class AddedStudentRoomsFragment extends Fragment {
 
-    private ToolsViewModel toolsViewModel;
+    private AddedStudentRoomsViewModel addedStudentRoomsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        toolsViewModel =
-                ViewModelProviders.of(this).get(ToolsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_tools, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
-        toolsViewModel.getText().observe(this, new Observer<String>() {
+        addedStudentRoomsViewModel =
+                ViewModelProviders.of(this).get(AddedStudentRoomsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_added_student_rooms, container, false);
+        final TextView textView = root.findViewById(R.id.text_added_student_rooms);
+        addedStudentRoomsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

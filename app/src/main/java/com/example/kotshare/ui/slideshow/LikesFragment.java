@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.gallery;
+package com.example.kotshare.ui.slideshow;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.kotshare.R;
 
-public class GalleryFragment extends Fragment {
+public class LikesFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private LikesViewModel likesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(this, new Observer<String>() {
+        likesViewModel =
+                ViewModelProviders.of(this).get(LikesViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_likes, container, false);
+        final TextView textView = root.findViewById(R.id.text_slideshow);
+        likesViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
