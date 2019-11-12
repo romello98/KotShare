@@ -1,4 +1,4 @@
-package com.example.kotshare.ui.tools;
+package com.example.kotshare.view.nav.student_rooms;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.kotshare.R;
 
-public class LogoutFragment extends Fragment {
+public class AddedStudentRoomsFragment extends Fragment {
 
-    private LogoutViewModel logoutViewModel;
+    private AddedStudentRoomsViewModel addedStudentRoomsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        logoutViewModel =
-                ViewModelProviders.of(this).get(LogoutViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_logout, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
-        logoutViewModel.getText().observe(this, new Observer<String>() {
+        addedStudentRoomsViewModel =
+                ViewModelProviders.of(this).get(AddedStudentRoomsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_added_student_rooms, container, false);
+        final TextView textView = root.findViewById(R.id.text_added_student_rooms);
+        addedStudentRoomsViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

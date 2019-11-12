@@ -1,7 +1,8 @@
-package com.example.kotshare;
+package com.example.kotshare.view;
 
 import android.os.Bundle;
 
+import com.example.kotshare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 

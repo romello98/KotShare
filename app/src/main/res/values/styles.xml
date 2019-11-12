@@ -17,4 +17,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Title">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/titleColor</item>
+    </style>
+
+    <style name="DefaultText">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

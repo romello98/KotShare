@@ -1,16 +1,16 @@
-package com.example.kotshare.ui.tools;
+package com.example.kotshare.view.nav.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class LogoutViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public LogoutViewModel() {
+    public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
+        mText.setValue("This is home fragment");
     }
 
     public LiveData<String> getText() {

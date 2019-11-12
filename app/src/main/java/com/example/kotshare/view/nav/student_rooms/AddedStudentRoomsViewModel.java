@@ -1,16 +1,16 @@
-package com.example.kotshare.ui.slideshow;
+package com.example.kotshare.view.nav.student_rooms;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class LikesViewModel extends ViewModel {
+public class AddedStudentRoomsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public LikesViewModel() {
+    public AddedStudentRoomsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+        mText.setValue("This is student rooms fragment");
     }
 
     public LiveData<String> getText() {
