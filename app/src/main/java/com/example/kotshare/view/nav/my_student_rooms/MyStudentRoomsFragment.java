@@ -1,4 +1,4 @@
-package com.example.kotshare.view.nav.likes;
+package com.example.kotshare.view.nav.my_student_rooms;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,15 +11,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.kotshare.R;
 
-public class LikesFragment extends Fragment {
+public class MyStudentRoomsFragment extends Fragment {
 
-    private LikesViewModel likesViewModel;
+    private MyStudentRoomsViewModel myStudentRoomsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        likesViewModel =
-                ViewModelProviders.of(this).get(LikesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_likes, container, false);
+        myStudentRoomsViewModel =
+                ViewModelProviders.of(this).get(MyStudentRoomsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_my_student_rooms, container, false);
         return root;
     }
 }

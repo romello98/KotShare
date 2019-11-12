@@ -68,7 +68,7 @@
                 android:autoLink="map"
                 android:ems="10"
                 android:hint="@string/login_password"
-                android:inputType="textPostalAddress" />
+                android:inputType="textPassword" />
         </LinearLayout>
 
         <Button
@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Button"
+            android:text="@string/log_in"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
