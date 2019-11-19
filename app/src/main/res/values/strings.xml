@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">KotShare</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">KotShare</string>
+    <string name="nav_header_subtitle">info@kotshare.be</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Réglages</string>
+
+    <string name="menu_home">Accueil</string>
+    <string name="menu_likes">Mes favoris</string>
+    <string name="menu_my_student_rooms">Mes kots</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="place">Lieu</string>
+    <string name="price">Prix</string>
+    <string name="between">Entre</string>
+    <string name="et">et</string>
+    <string name="periodeDeDisponibilites">Période de disponibilité</string>
+    <string name="title_activity_login">Log In</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login_email">E-mail</string>
+    <string name="login_password">Mot de passe</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="error_password_length">Le mot de passe doit contenir au moins %$1d caractère(s).</string>
+    <string name="error_password_uppercase_letter">Le mot de passe doit contenir au moins %$1d majuscule(s).</string>
+    <string name="error_password_lowercase_letter">Le mot de passe doit contenir au moins %$1d minuscule(s).</string>
+    <string name="error_password_digits">Le mot de passe doit contenir au moins %$1d chiffres(s).</string>
+
+    <string name="error_email_format">L\'email entré n\'a pas un format valide.</string>
+
+    <string name="PREFERENCES_FILE">preferences</string>
+    <string name="USER_EMAIL">user_email</string>
+    <string name="USER_PASSWORD">user_password</string>
+    <string name="USER_CREDENTIALS_EXPIRING_TIME">user_expiring_time</string>
+    <string name="DEFAULT_DATE_FORMAT">dd-M-yyyy hh:mm:ss a</string>
+    <string name="log_in">Se connecter</string>
+
+</resources>
