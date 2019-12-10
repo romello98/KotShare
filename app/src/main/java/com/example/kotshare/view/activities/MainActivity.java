@@ -1,4 +1,4 @@
-package com.example.kotshare.view;
+package com.example.kotshare.view.activities;
 
 import android.os.Bundle;
 

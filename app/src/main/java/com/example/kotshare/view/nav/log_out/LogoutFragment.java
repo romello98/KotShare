@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.kotshare.R;
-import com.example.kotshare.view.LoginActivity;
+import com.example.kotshare.view.activities.LoginActivity;
 
 public class LogoutFragment extends Fragment {
 
@@ -27,8 +27,7 @@ public class LogoutFragment extends Fragment {
         );
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.remove(getString(R.string.USER_EMAIL));
-        editor.remove(getString(R.string.USER_PASSWORD));
+        editor.remove(getString(R.string.USER_ID));
         editor.remove(getString(R.string.USER_CREDENTIALS_EXPIRING_TIME));
         editor.apply();
         startActivity(intent);

@@ -40,10 +40,9 @@
     <string name="error_email_format">L\'email entré n\'a pas un format valide.</string>
 
     <string name="PREFERENCES_FILE">preferences</string>
-    <string name="USER_EMAIL">user_email</string>
-    <string name="USER_PASSWORD">user_password</string>
     <string name="USER_CREDENTIALS_EXPIRING_TIME">user_expiring_time</string>
     <string name="DEFAULT_DATE_FORMAT">dd-M-yyyy hh:mm:ss a</string>
     <string name="log_in">Se connecter</string>
+    <string name="USER_ID">user_id</string>
 
 </resources>
