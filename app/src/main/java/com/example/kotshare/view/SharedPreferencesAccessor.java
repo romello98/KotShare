@@ -3,6 +3,7 @@ package com.example.kotshare.view;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.kotshare.R;
 import com.example.kotshare.data_access.UserDAO;
@@ -86,6 +87,7 @@ public class SharedPreferencesAccessor
         }
 
         this.user = userDataAccess.find(storedId);
+        Log.i("app", this.user.toString());
 
         return expiringDateTime.after(Calendar.getInstance());
     }

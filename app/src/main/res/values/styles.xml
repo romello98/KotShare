@@ -26,7 +26,8 @@
 
     <style name="Title">
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/titleColor</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AppTitle">
@@ -36,6 +37,12 @@
     </style>
 
     <style name="DefaultText">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="LittleHeading">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 

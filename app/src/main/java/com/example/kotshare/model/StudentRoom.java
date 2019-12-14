@@ -6,7 +6,7 @@ public class StudentRoom
 
     private String title;
 
-    private String description;
+    private Double price;
 
     private User holder;
 
@@ -14,11 +14,11 @@ public class StudentRoom
         return holder;
     }
 
-    public StudentRoom(Integer id, String title, String description, User holder)
+    public StudentRoom(Integer id, String title, Double price, User holder)
     {
         setId(id);
         setTitle(title);
-        setDescription(description);
+        setPrice(price);
         setHolder(holder);
     }
 
@@ -42,11 +42,11 @@ public class StudentRoom
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
