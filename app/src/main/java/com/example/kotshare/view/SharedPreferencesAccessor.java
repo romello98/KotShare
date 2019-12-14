@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.kotshare.R;
+import com.example.kotshare.data_access.UserDAO;
+import com.example.kotshare.data_access.UserDataAccess;
 import com.example.kotshare.model.User;
 import com.example.kotshare.view.activities.LoginActivity;
 import com.example.kotshare.view.activities.MainActivity;
@@ -18,9 +20,11 @@ public class SharedPreferencesAccessor
 {
     private static SharedPreferencesAccessor sharedPreferencesAccessor;
     private User user;
+    private UserDataAccess userDataAccess;
 
     private SharedPreferencesAccessor()
     {
+        this.userDataAccess = new UserDAO();
     }
 
     public static SharedPreferencesAccessor getInstance()
@@ -47,8 +51,6 @@ public class SharedPreferencesAccessor
                 Locale.ENGLISH);
         String storedExpiringTime;
 
-        this.user = user;
-
         expiringDateTime.add(Calendar.DATE, 10);
         storedExpiringTime = simpleDateFormat.format(expiringDateTime.getTime());
         editor.putInt(context.getString(R.string.USER_ID), user.getId());
@@ -62,14 +64,15 @@ public class SharedPreferencesAccessor
                 context.getString(R.string.PREFERENCES_FILE),
                 Context.MODE_PRIVATE
         );
-        boolean hasStoredId = sharedPreferences.contains(context.getString(R.string.USER_ID));
+        int storedId = sharedPreferences.getInt(context.getString(R.string.USER_ID),
+                -1);
         String storedExpiringTime = sharedPreferences.getString(
                 context.getString(R.string.USER_CREDENTIALS_EXPIRING_TIME),
                 null);
         Calendar expiringDateTime;
         SimpleDateFormat simpleDateFormat;
 
-        if(!hasStoredId || storedExpiringTime == null) return false;
+        if(storedId == -1 || storedExpiringTime == null) return false;
 
         expiringDateTime = Calendar.getInstance();
         simpleDateFormat = new SimpleDateFormat(
@@ -82,6 +85,14 @@ public class SharedPreferencesAccessor
             e.printStackTrace();
         }
 
+        this.user = userDataAccess.find(storedId);
+
         return expiringDateTime.after(Calendar.getInstance());
+    }
+
+    public boolean isCurrentUser(User user)
+    {
+        boolean validUsers = this.user != null && this.user.getId() != null && user != null;
+        return validUsers && this.user.getId().equals(user.getId());
     }
 }
