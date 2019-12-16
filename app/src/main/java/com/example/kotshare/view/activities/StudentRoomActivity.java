@@ -1,10 +1,20 @@
 package com.example.kotshare.view.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kotshare.R;
@@ -31,6 +41,7 @@ import butterknife.ButterKnife;
 
 public class StudentRoomActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    @Nullable
     @BindView(R.id.textView_singleStudentRoomTitle)
     TextView textView_singleStudentRoomTitle;
 
@@ -38,6 +49,11 @@ public class StudentRoomActivity extends FragmentActivity implements OnMapReadyC
     SliderView sliderStudentRoom;
     private StudentRoom studentRoom;
     private StudentRoomDataAccess studentRoomDataAccess;
+
+    /*
+    @BindView(R.id.phone)
+    ImageView phoneButton;
+    */
 
     @BindView(R.id.informationsStudentRoom)
     RecyclerView characteristicsRecyclerView;
@@ -57,6 +73,7 @@ public class StudentRoomActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         int id = getIntent().getIntExtra(getString(R.string.STUDENT_ROOM_ID), -1);
 
+        // Slider
         if(id != -1)
         {
             studentRoom = studentRoomDataAccess.find(id);
@@ -107,4 +124,23 @@ public class StudentRoomActivity extends FragmentActivity implements OnMapReadyC
         mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(aubel, zoom));
     }
 
+    /*
+    @Override
+    public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+
+        Intent callIntent = new Intent();
+        callIntent.setAction(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:123456789"));
+
+
+
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(callIntent);
+            }
+        });
+        return parent;
+    }
+    */
 }
