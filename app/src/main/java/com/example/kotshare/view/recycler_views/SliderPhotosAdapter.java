@@ -1,4 +1,4 @@
-package com.example.kotshare.view.activities;
+package com.example.kotshare.view.recycler_views;
 
 import android.content.Context;
 import android.view.LayoutInflater;

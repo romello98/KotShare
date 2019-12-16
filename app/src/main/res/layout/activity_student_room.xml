@@ -91,62 +91,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/informationsStudentRoom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingStars"
-                tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="454dp">
-
-                <TextView
-                    android:id="@+id/infoPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="390€ /mois"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/infoBathroom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Salle de bain personnelle"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/infoKitchen"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Cuisine partagée"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/infoGarden"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jardin accessible"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/infoNumberRoomMate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="4 colocataires"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:id="@+id/infoWifi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Wifi compris"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
+                />
 
             <fragment
                 android:layout_width="match_parent"
