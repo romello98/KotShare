@@ -36,7 +36,6 @@ public class HomeFragment extends Fragment {
     private StudentRoomDataAccess studentRoomDataAccess = new StudentRoomDAO();
 
     private GenericRecyclerViewAdapter<StudentRoom> studentRoomGenericRecyclerViewAdapter;
-    private HashMap<ViewHolderType, BindLogic<StudentRoom>> viewHolderTypes = new HashMap<>();
     private SharedPreferencesAccessor sharedPreferencesAccessor = SharedPreferencesAccessor.getInstance();
     private StudentRoomsViewHolderTypes studentRoomsViewHolderTypes = StudentRoomsViewHolderTypes.getInstance();
 

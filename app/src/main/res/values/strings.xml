@@ -16,7 +16,7 @@
     <string name="student_room_single">Détails</string>
 
     <string name="place">Lieu</string>
-    <string name="price">Prix</string>
+    <string name="monthlyPrice">Prix</string>
     <string name="between">Entre</string>
     <string name="et">et</string>
     <string name="periodeDeDisponibilites">Période de disponibilité</string>

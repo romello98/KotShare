@@ -1,9 +1,12 @@
 package com.example.kotshare.data_access;
 
+import com.example.kotshare.model.Like;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class StudentRoomDAO implements StudentRoomDataAccess
 {
@@ -18,7 +21,8 @@ public class StudentRoomDAO implements StudentRoomDataAccess
         this.userDataAccess = new UserDAO();
         this.studentRooms = new ArrayList<>(Arrays.asList(
                 new StudentRoom(1, "Kot appartenant à moi-même", 300., userDataAccess.find(1)),
-                new StudentRoom(2, "Kot appartenant à autrui", 450., userDataAccess.find(2))
+                new StudentRoom(2, "Kot appartenant à autrui", 450., userDataAccess.find(2)),
+                new StudentRoom(3, "Kot non liké", 540., userDataAccess.find(1))
         ));
     }
 
@@ -62,4 +66,21 @@ public class StudentRoomDAO implements StudentRoomDataAccess
         StudentRoom foundStudentRoom = find(studentRoom.getId());
         studentRooms.remove(foundStudentRoom);
     }
+
+    @Override
+    public ArrayList<StudentRoom> getAllLikedBy(User user) {
+        ArrayList<StudentRoom> likedStudentRooms = new ArrayList<>();
+        for(StudentRoom studentRoom : studentRooms)
+            for(Like like : studentRoom.getLikes())
+                if(user.getLikes().contains(like))
+                    likedStudentRooms.add(studentRoom);
+        return likedStudentRooms;
+    }
+
+    @Override
+    public boolean isLikedBy(StudentRoom studentRoom, User user) {
+        return getAllLikedBy(user).contains(studentRoom);
+    }
+
+
 }

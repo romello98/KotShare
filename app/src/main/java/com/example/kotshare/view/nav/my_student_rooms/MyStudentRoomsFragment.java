@@ -35,7 +35,6 @@ public class MyStudentRoomsFragment extends Fragment {
     public RecyclerView recyclerView_myStudentRooms;
 
     private GenericRecyclerViewAdapter<StudentRoom> studentRoomGenericRecyclerViewAdapter;
-    private HashMap<ViewHolderType, BindLogic<StudentRoom>> viewHolderTypes = new HashMap<>();
     private SharedPreferencesAccessor sharedPreferencesAccessor = SharedPreferencesAccessor.getInstance();
     private StudentRoomsViewHolderTypes studentRoomsViewHolderTypes = StudentRoomsViewHolderTypes.getInstance();
 

@@ -1,24 +1,31 @@
 package com.example.kotshare.model;
 
+import java.util.HashSet;
+
 public class User
 {
-    //TODO: compléter la classe
-
+    private Integer id;
     private String email;
     private String password;
-    private Integer id;
+    private String phoneNumber;
+    private String lastName;
+    private String firstName;
+    private School school;
+    private HashSet<Like> likes;
 
     public User() {}
+
     public User(String email, String password)
     {
-        this.email = email;
-        this.password = password;
+        setEmail(email);
+        setPassword(password);
+        setLikes(new HashSet<>());
     }
 
     public User(Integer id, String email, String password)
     {
         this(email, password);
-        this.id = id;
+        setId(id);
     }
 
     public String getEmail() {
@@ -43,5 +50,45 @@ public class User
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public HashSet<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(HashSet<Like> likes) {
+        this.likes = likes;
     }
 }
