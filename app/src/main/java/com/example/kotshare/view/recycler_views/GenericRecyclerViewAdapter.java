@@ -1,6 +1,7 @@
 package com.example.kotshare.view.recycler_views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ public class GenericRecyclerViewAdapter<T> extends RecyclerView.Adapter<GenericR
         BindLogic<T> bindLogic = this.viewHolderTypes.get(viewHolderType);
         int layoutId = bindLogic.getLayoutId();
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+
+        Log.i("app", "Created view !!!");
 
         return new GenericRecyclerViewAdapter.ViewHolder<T>(view) {
             @Override

@@ -20,9 +20,10 @@ public class StudentRoomDAO implements StudentRoomDataAccess
         // TODO : À supprimer, simulation de données
         this.userDataAccess = new UserDAO();
         this.studentRooms = new ArrayList<>(Arrays.asList(
-                new StudentRoom(1, "Kot appartenant à moi-même", 300., userDataAccess.find(1)),
-                new StudentRoom(2, "Kot appartenant à autrui", 450., userDataAccess.find(2)),
-                new StudentRoom(3, "Kot non liké", 540., userDataAccess.find(1))
+                new StudentRoom(1, "Kot appartenant à John", 300., userDataAccess.find(1)),
+                new StudentRoom(2, "Kot appartenant à Jane", 450., userDataAccess.find(2)),
+                new StudentRoom(3, "Kot non liké", 540., userDataAccess.find(1)),
+                new StudentRoom(3, "Kot supplémentaire", 540., userDataAccess.find(2))
         ));
     }
 

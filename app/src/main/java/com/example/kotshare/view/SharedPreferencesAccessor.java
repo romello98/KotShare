@@ -57,6 +57,7 @@ public class SharedPreferencesAccessor
         editor.putInt(context.getString(R.string.USER_ID), user.getId());
         editor.putString(context.getString(R.string.USER_CREDENTIALS_EXPIRING_TIME), storedExpiringTime);
         editor.apply();
+        this.user = user;
     }
 
     public boolean hasStoredUser(Context context)
