@@ -21,7 +21,9 @@ public class StudentRoom
     private String city;
     private String address;
     private User holder;
-    private HashSet<Like> likes;
+    private HashSet<Like> likes = new HashSet<>();
+    private HashSet<Photo> photos = new HashSet<>();
+    private HashSet<UserStudentRoomRating> userStudentRoomRatings = new HashSet<>();
 
     public User getHolder() {
         return holder;
@@ -35,7 +37,6 @@ public class StudentRoom
         setTitle(title);
         setMonthlyPrice(monthlyPrice);
         setHolder(holder);
-        setLikes(new HashSet<>());
     }
 
     public Integer getId() {
@@ -160,5 +161,21 @@ public class StudentRoom
 
     public void setLikes(HashSet<Like> likes) {
         this.likes = likes;
+    }
+
+    public HashSet<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(HashSet<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public HashSet<UserStudentRoomRating> getUserStudentRoomRatings() {
+        return userStudentRoomRatings;
+    }
+
+    public void setUserStudentRoomRatings(HashSet<UserStudentRoomRating> userStudentRoomRatings) {
+        this.userStudentRoomRatings = userStudentRoomRatings;
     }
 }

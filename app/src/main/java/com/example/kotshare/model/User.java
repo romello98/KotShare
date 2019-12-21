@@ -11,7 +11,10 @@ public class User
     private String lastName;
     private String firstName;
     private School school;
-    private HashSet<Like> likes;
+    private HashSet<Like> likes = new HashSet<>();
+    private HashSet<StudentRoom> studentRooms = new HashSet<>();
+    private HashSet<UserRole> userRoles = new HashSet<>();
+    private HashSet<UserStudentRoomRating> studentRoomRatings = new HashSet<>();
 
     public User() {}
 
@@ -19,7 +22,6 @@ public class User
     {
         setEmail(email);
         setPassword(password);
-        setLikes(new HashSet<>());
     }
 
     public User(Integer id, String email, String password)
@@ -90,5 +92,29 @@ public class User
 
     public void setLikes(HashSet<Like> likes) {
         this.likes = likes;
+    }
+
+    public HashSet<StudentRoom> getStudentRooms() {
+        return studentRooms;
+    }
+
+    public void setStudentRooms(HashSet<StudentRoom> studentRooms) {
+        this.studentRooms = studentRooms;
+    }
+
+    public HashSet<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(HashSet<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public HashSet<UserStudentRoomRating> getStudentRoomRatings() {
+        return studentRoomRatings;
+    }
+
+    public void setStudentRoomRatings(HashSet<UserStudentRoomRating> studentRoomRatings) {
+        this.studentRoomRatings = studentRoomRatings;
     }
 }

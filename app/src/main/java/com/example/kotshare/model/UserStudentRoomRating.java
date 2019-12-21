@@ -5,11 +5,11 @@ public class UserStudentRoomRating
     private Integer id;
     private User user;
     private StudentRoom studentRoom;
-    private Double rating;
+    private Integer rating;
 
     public UserStudentRoomRating(){}
 
-    public UserStudentRoomRating(Integer id, User user, StudentRoom studentRoom, Double rating) {
+    public UserStudentRoomRating(Integer id, User user, StudentRoom studentRoom, Integer rating) {
         setId(id);
         setUser(user);
         setStudentRoom(studentRoom);
@@ -40,13 +40,13 @@ public class UserStudentRoomRating
         this.studentRoom = studentRoom;
     }
 
-    public Double getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
-        if(rating > 5) this.rating = 5.;
-        else if (rating < 0) this.rating = 0.;
+    public void setRating(Integer rating) {
+        if(rating > 5) this.rating = 5;
+        else if (rating < 0) this.rating = 0;
         else this.rating = rating;
     }
 }

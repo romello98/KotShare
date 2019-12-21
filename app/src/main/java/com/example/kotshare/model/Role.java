@@ -2,18 +2,17 @@ package com.example.kotshare.model;
 
 import java.util.HashSet;
 
-public class School
+public class Role
 {
     private Integer id;
     private String name;
-    private HashSet<User> users = new HashSet<>();
+    private HashSet<UserRole> userRoles = new HashSet<>();
 
-    public School() { }
+    public Role() { }
 
-    public School(Integer id, String name, HashSet<User> users) {
+    public Role(Integer id, String name) {
         setId(id);
         setName(name);
-        setUsers(users);
     }
 
     public Integer getId() {
@@ -32,11 +31,11 @@ public class School
         this.name = name;
     }
 
-    public HashSet<User> getUsers() {
-        return users;
+    public HashSet<UserRole> getUserRoles() {
+        return userRoles;
     }
 
-    public void setUsers(HashSet<User> users) {
-        this.users = users;
+    public void setUserRoles(HashSet<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 }

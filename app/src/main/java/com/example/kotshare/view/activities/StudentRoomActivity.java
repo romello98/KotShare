@@ -2,6 +2,7 @@ package com.example.kotshare.view.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StudentRoomActivity extends FragmentActivity implements OnMapReadyCallback {
+public class StudentRoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @Nullable
     @BindView(R.id.textView_singleStudentRoomTitle)
