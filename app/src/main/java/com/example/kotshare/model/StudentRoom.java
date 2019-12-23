@@ -1,6 +1,7 @@
 package com.example.kotshare.model;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.HashSet;
 
@@ -10,33 +11,48 @@ public class StudentRoom
     private String title;
     private String description;
     private Double monthlyPrice;
-    private Boolean hasPersonalBathroom;
-    private Boolean hasPersonalKitchen;
+    @SerializedName("lat")
+    private Double latitude;
+    @SerializedName("long")
+    private Double longitude;
+    private Boolean personnalBathroom;
+    private Boolean personnalKitchen;
     private Boolean hasGarden;
-    private Boolean hasFreeWifi;
-    private Integer roommatesNumber;
+    private Boolean freeWifi;
+    private Integer numberRoommate;
     private Boolean isHidden;
     private Date startRentingDate;
     private Date endRatingDate;
-    private String city;
-    private String address;
-    private User holder;
+    private City city;
+    private String street;
+    private String streetNumber;
+    private User user;
+    private boolean isLiked;
     private HashSet<Like> likes = new HashSet<>();
     private HashSet<Photo> photos = new HashSet<>();
     private HashSet<UserStudentRoomRating> userStudentRoomRatings = new HashSet<>();
 
-    public User getHolder() {
-        return holder;
+    public User getUser() {
+        return user;
     }
 
     public StudentRoom() {}
 
-    public StudentRoom(Integer id, String title, Double monthlyPrice, User holder)
+    public StudentRoom(Integer id, String title, Double monthlyPrice, User user)
     {
         setId(id);
         setTitle(title);
         setMonthlyPrice(monthlyPrice);
-        setHolder(holder);
+        setUser(user);
+        isLiked = false;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 
     public Integer getId() {
@@ -47,8 +63,8 @@ public class StudentRoom
         this.id = id;
     }
 
-    public void setHolder(User holder) {
-        this.holder = holder;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -75,20 +91,20 @@ public class StudentRoom
         this.description = description;
     }
 
-    public Boolean getHasPersonalBathroom() {
-        return hasPersonalBathroom;
+    public Boolean getPersonnalBathroom() {
+        return personnalBathroom;
     }
 
-    public void setHasPersonalBathroom(Boolean hasPersonalBathroom) {
-        this.hasPersonalBathroom = hasPersonalBathroom;
+    public void setPersonnalBathroom(Boolean personnalBathroom) {
+        this.personnalBathroom = personnalBathroom;
     }
 
-    public Boolean getHasPersonalKitchen() {
-        return hasPersonalKitchen;
+    public Boolean getPersonnalKitchen() {
+        return personnalKitchen;
     }
 
-    public void setHasPersonalKitchen(Boolean hasPersonalKitchen) {
-        this.hasPersonalKitchen = hasPersonalKitchen;
+    public void setPersonnalKitchen(Boolean personnalKitchen) {
+        this.personnalKitchen = personnalKitchen;
     }
 
     public Boolean getHasGarden() {
@@ -99,20 +115,20 @@ public class StudentRoom
         this.hasGarden = hasGarden;
     }
 
-    public Boolean getHasFreeWifi() {
-        return hasFreeWifi;
+    public Boolean getFreeWifi() {
+        return freeWifi;
     }
 
-    public void setHasFreeWifi(Boolean hasFreeWifi) {
-        this.hasFreeWifi = hasFreeWifi;
+    public void setFreeWifi(Boolean freeWifi) {
+        this.freeWifi = freeWifi;
     }
 
-    public Integer getRoommatesNumber() {
-        return roommatesNumber;
+    public Integer getNumberRoommate() {
+        return numberRoommate;
     }
 
-    public void setRoommatesNumber(Integer roommatesNumber) {
-        this.roommatesNumber = roommatesNumber;
+    public void setNumberRoommate(Integer numberRoommate) {
+        this.numberRoommate = numberRoommate;
     }
 
     public Boolean getHidden() {
@@ -139,20 +155,28 @@ public class StudentRoom
         this.endRatingDate = endRatingDate;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getStreetNumber() {
+        return streetNumber;
+    }
+
+    public void setStreetNumber(String streetNumber) {
+        this.streetNumber = streetNumber;
     }
 
     public HashSet<Like> getLikes() {
@@ -177,5 +201,21 @@ public class StudentRoom
 
     public void setUserStudentRoomRatings(HashSet<UserStudentRoomRating> userStudentRoomRatings) {
         this.userStudentRoomRatings = userStudentRoomRatings;
+    }
+
+    public Double getLat() {
+        return latitude;
+    }
+
+    public void setLat(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLong() {
+        return longitude;
+    }
+
+    public void setLong(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kotshare.R;
+import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.data_access.StudentRoomDAO;
 import com.example.kotshare.data_access.StudentRoomDataAccess;
 import com.example.kotshare.model.StudentRoom;
@@ -39,13 +40,13 @@ public class MyStudentRoomsFragment extends Fragment {
     private StudentRoomsViewHolderTypes studentRoomsViewHolderTypes = StudentRoomsViewHolderTypes.getInstance();
 
     private MyStudentRoomsViewModel myStudentRoomsViewModel;
-    private StudentRoomDataAccess studentRoomDataAccess;
+    private StudentRoomController studentRoomController;
 
     private ArrayList<StudentRoom> studentRooms;
 
     public MyStudentRoomsFragment()
     {
-        this.studentRoomDataAccess = new StudentRoomDAO();
+        this.studentRoomController = new StudentRoomController();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -56,8 +57,8 @@ public class MyStudentRoomsFragment extends Fragment {
         myStudentRoomsViewModel =
                 ViewModelProviders.of(this).get(MyStudentRoomsViewModel.class);
         root = inflater.inflate(R.layout.fragment_my_student_rooms, container, false);
-        this.studentRooms = studentRoomDataAccess.where(studentRoom
-                -> sharedPreferencesAccessor.isCurrentUser(studentRoom.getHolder()));
+/*        this.studentRooms = studentRoomController.where(studentRoom
+                -> sharedPreferencesAccessor.isCurrentUser(studentRoom.getUser()));*/
 
         ButterKnife.bind(this, root);
 

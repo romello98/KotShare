@@ -2,13 +2,16 @@ package com.example.kotshare.view.recycler_views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
 import com.example.kotshare.R;
+import com.example.kotshare.controller.LikeController;
 import com.example.kotshare.controller.StudentRoomController;
+import com.example.kotshare.model.Like;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.model.User;
 import com.example.kotshare.view.SharedPreferencesAccessor;
@@ -20,6 +23,7 @@ import java.util.Locale;
 public class StudentRoomsViewHolderTypes
 {
     private StudentRoomController studentRoomController;
+    private LikeController likeController;
     private User user;
     private static StudentRoomsViewHolderTypes studentRoomsViewHolderTypes;
     private HashMap<ViewHolderType, BindLogic<StudentRoom>> viewHolderTypesLogic;
@@ -29,19 +33,23 @@ public class StudentRoomsViewHolderTypes
     {
         this.user = SharedPreferencesAccessor.getInstance().getUser();
         this.studentRoomController = new StudentRoomController();
+        this.likeController = new LikeController();
         this.viewHolderTypesLogic = new HashMap<>();
 
         commonBind = (studentRoom, viewHolder) -> {
                 Context context = viewHolder.itemView.getContext();
                 CardView cardView = viewHolder.itemView.findViewById(R.id.cardview_studentRoomItem);
-                TextView description = viewHolder.itemView.findViewById(R.id.textView_studentRoomPrice);
+                TextView price = viewHolder.itemView.findViewById(R.id.textView_studentRoomPrice);
                 TextView title = viewHolder.itemView.findViewById(R.id.textView_studentRoomTitle);
-                description.setText(String.format(context.getString(R.string.price_format),
+                TextView city = viewHolder.itemView.findViewById(R.id.textView_studentRoomPlace);
+                price.setText(String.format(context.getString(R.string.price_format),
                         String.format(Locale.FRENCH, "%.2f", studentRoom.getMonthlyPrice())));
                 title.setText(studentRoom.getTitle());
+                city.setText(studentRoom.getCity().toString());
                 cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(context, StudentRoomActivity.class);
-                    intent.putExtra(context.getString(R.string.STUDENT_ROOM_ID), studentRoom.getId());
+                    if(studentRoom.getId() != null)
+                        intent.putExtra(context.getString(R.string.STUDENT_ROOM_ID), studentRoom.getId());
                     context.startActivity(intent);
                 });
         };
@@ -59,11 +67,27 @@ public class StudentRoomsViewHolderTypes
                     commonBind.bind(studentRoom, viewHolder);
                     Context context = viewHolder.itemView.getContext();
                     ImageView editButton = viewHolder.itemView.findViewById(R.id.imageView_action);
-                    if(studentRoomController.isLikedBy(studentRoom, user))
-                        editButton.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_filled_24dp));
+                    Drawable favoriteFilled = context.getDrawable(R.drawable.ic_favorite_filled_24dp);
+                    Drawable favoriteEmpty = context.getDrawable(R.drawable.ic_favorite_empty_24dp);
+                    boolean isLikedByUser = studentRoom.isLiked();
+                    if(isLikedByUser)
+                        editButton.setImageDrawable(favoriteFilled);
                     else
-                        editButton.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_empty_24dp));
-                }));
+                        editButton.setImageDrawable(favoriteEmpty);
+
+                    editButton.setOnClickListener(e ->
+                    {
+                        if(likeController.isLikedBy(studentRoom.getId(), user.getId()))
+                        {
+                            boolean hasUnliked = likeController.unlike(user.getId(), studentRoom.getId());
+                            if(hasUnliked) editButton.setImageDrawable(favoriteEmpty);
+                        }
+                        else
+                        {
+                            Like like = likeController.sendLike(user.getId(), studentRoom.getId());
+                            if(like != null) editButton.setImageDrawable(favoriteFilled);
+                        }
+                    });}));
     }
 
     public HashMap<ViewHolderType, BindLogic<StudentRoom>> getTypes()

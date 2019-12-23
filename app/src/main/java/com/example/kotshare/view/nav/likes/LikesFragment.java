@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kotshare.R;
+import com.example.kotshare.controller.LikeController;
+import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.data_access.StudentRoomDAO;
 import com.example.kotshare.data_access.StudentRoomDataAccess;
 import com.example.kotshare.model.Like;
@@ -42,14 +44,16 @@ public class LikesFragment extends Fragment {
     private SharedPreferencesAccessor sharedPreferencesAccessor = SharedPreferencesAccessor.getInstance();
     private StudentRoomsViewHolderTypes studentRoomsViewHolderTypes = StudentRoomsViewHolderTypes.getInstance();
 
-    private StudentRoomDataAccess studentRoomDataAccess;
+    private StudentRoomController studentRoomController;
+    private LikeController likeController;
 
     private ArrayList<StudentRoom> studentRooms;
     private LikesViewModel likesViewModel;
 
     public LikesFragment()
     {
-        this.studentRoomDataAccess = new StudentRoomDAO();
+        this.studentRoomController = new StudentRoomController();
+        this.likeController = new LikeController();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -61,15 +65,11 @@ public class LikesFragment extends Fragment {
         GenericRecyclerViewAdapter.ViewHolderDispatcher<StudentRoom> viewHolderDispatcher =
                 item -> ViewHolderType.STUDENT_ROOM_ELSE;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        this.studentRooms = studentRoomDataAccess.where(studentRoom ->
+/*        this.studentRooms = studentRoomController.where(studentRoom ->
         {
             User currentUser = sharedPreferencesAccessor.getUser();
-            HashSet<Like> userLikes = currentUser.getLikes();
-            for(Like like : userLikes)
-                if(studentRoom.getLikes().contains(like))
-                    return true;
-            return false;
-        });
+            return likeController.isLikedBy(studentRoom.getId(), currentUser.getId());
+        });*/
 
         ButterKnife.bind(this, root);
 

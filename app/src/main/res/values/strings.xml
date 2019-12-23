@@ -20,7 +20,9 @@
     <string name="between">Entre</string>
     <string name="et">et</string>
     <string name="periodeDeDisponibilites">Période de disponibilité</string>
+    <string name="any">peu importe</string>
     <string name="title_activity_login">Log In</string>
+    <string name="search">Rechercher</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -32,6 +34,19 @@
     <string name="login_email">E-mail</string>
     <string name="login_password">Mot de passe</string>
     <string name="price_format">%1$s € / mois</string>
+
+    <!-- Caractéristiques -->
+
+    <string name="shared_bathroom">Salle de bain partagée</string>
+    <string name="shared_kitchen">Cuisine partagée</string>
+    <string name="accessible_garden">Jardin accessible</string>
+    <string name="roommates_number">%1$d colocataire(s)</string>
+    <string name="included_wifi">Wifi inclus</string>
+
+    <string name="private_bathroom">Salle de bain privée</string>
+    <string name="private_kitchen">Cuisine privée</string>
+    <string name="no_garden">Pas de jardin</string>
+    <string name="not_included_wifi">Wifi non-inclus</string>
 
     <!-- ERROR MESSAGES -->
     <string name="error_password_length">Le mot de passe doit contenir au moins %$1d caractère(s).</string>
@@ -45,7 +60,12 @@
     <string name="USER_CREDENTIALS_EXPIRING_TIME">user_expiring_time</string>
     <string name="DEFAULT_DATE_FORMAT">dd-M-yyyy hh:mm:ss a</string>
     <string name="log_in">Se connecter</string>
-    <string name="USER_ID">user_id</string>
+    <string name="USER_ID">userId</string>
     <string name="STUDENT_ROOM_ID">student_room_id</string>
+    <string name="USER_TOKEN">user_token</string>
+    <string name="characteristics">Caractéristiques</string>
+    <string name="description">Description</string>
+    <string name="no_description">Aucune description</string>
+    <string name="localisation">Situation</string>
 
 </resources>

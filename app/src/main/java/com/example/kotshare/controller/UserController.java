@@ -5,6 +5,7 @@ import com.example.kotshare.data_access.UserDataAccess;
 import com.example.kotshare.model.User;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import retrofit2.Call;
 
 public class UserController
 {
@@ -12,10 +13,16 @@ public class UserController
 
     public UserController()
     {
-        userDataAccess = new UserDAO();
+        userDataAccess = UserDAO.getInstance();
     }
 
-    public User getUserByEmail(String email)
+    public Call<User> find(int userId)
+    {
+        userDataAccess = UserDAO.getInstance();
+        return userDataAccess.find(userId);
+    }
+
+    public Call<User> getUserByEmail(String email)
     {
         return userDataAccess.getUserByEmail(email);
     }

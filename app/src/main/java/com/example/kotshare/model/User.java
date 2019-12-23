@@ -11,15 +11,22 @@ public class User
     private String lastName;
     private String firstName;
     private School school;
-    private HashSet<Like> likes = new HashSet<>();
-    private HashSet<StudentRoom> studentRooms = new HashSet<>();
-    private HashSet<UserRole> userRoles = new HashSet<>();
-    private HashSet<UserStudentRoomRating> studentRoomRatings = new HashSet<>();
+    private HashSet<Like> likes;
+    private HashSet<StudentRoom> studentRooms;
+    private HashSet<UserRole> userRoles;
+    private HashSet<UserStudentRoomRating> studentRoomRatings;
 
-    public User() {}
+    public User()
+    {
+        this.likes = new HashSet<>();
+        this.studentRooms = new HashSet<>();
+        this.userRoles = new HashSet<>();
+        this.studentRoomRatings = new HashSet<>();
+    }
 
     public User(String email, String password)
     {
+        this();
         setEmail(email);
         setPassword(password);
     }

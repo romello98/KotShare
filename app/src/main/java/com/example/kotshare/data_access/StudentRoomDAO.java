@@ -1,31 +1,58 @@
 package com.example.kotshare.data_access;
 
+import com.example.kotshare.data_access.services.ServicesConfiguration;
+import com.example.kotshare.data_access.services.StudentRoomService;
 import com.example.kotshare.model.Like;
+import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
-import com.example.kotshare.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+
+import retrofit2.Call;
 
 public class StudentRoomDAO implements StudentRoomDataAccess
 {
 
     //TODO: Supprimer
+    private static StudentRoomDAO studentRoomDAO;
     private UserDataAccess userDataAccess;
+    private LikeDataAccess likeDataAccess;
     private ArrayList<StudentRoom> studentRooms;
+    private StudentRoomService studentRoomService;
 
-    public StudentRoomDAO()
+    private StudentRoomDAO()
     {
-        // TODO : À supprimer, simulation de données
-        this.userDataAccess = new UserDAO();
-        this.studentRooms = new ArrayList<>(Arrays.asList(
+        /*OkHttpClient httpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(StudentRoomService.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build();
+        studentRoomService = retrofit.create(StudentRoomService.class);*/
+        this.studentRoomService = ServicesConfiguration.getInstance().getRetrofit()
+                .create(StudentRoomService.class);
+    }
+
+    public static StudentRoomDAO getInstance()
+    {
+        if(studentRoomDAO == null) studentRoomDAO = new StudentRoomDAO();
+        return studentRoomDAO;
+    }
+
+    public void init()
+    {
+        /*this.userDataAccess = UserDAO.getInstance();
+        this.likeDataAccess = LikeDAO.getInstance();
+        if(studentRooms == null)
+            this.studentRooms = new ArrayList<>(Arrays.asList(
                 new StudentRoom(1, "Kot appartenant à John", 300., userDataAccess.find(1)),
                 new StudentRoom(2, "Kot appartenant à Jane", 450., userDataAccess.find(2)),
                 new StudentRoom(3, "Kot non liké", 540., userDataAccess.find(1)),
-                new StudentRoom(3, "Kot supplémentaire", 540., userDataAccess.find(2))
-        ));
+                new StudentRoom(4, "Kot supplémentaire", 540., userDataAccess.find(2))
+            ));*/
     }
+
 
     @Override
     public StudentRoom add(StudentRoom studentRoom) {
@@ -34,27 +61,28 @@ public class StudentRoomDAO implements StudentRoomDataAccess
     }
 
     @Override
-    public ArrayList<StudentRoom> getAll() {
-        return studentRooms;
+    public Call<PagedResult<StudentRoom>> getAll(Integer pageIndex, Integer pageSize) {
+        return studentRoomService.getStudentRooms(pageIndex, pageSize, null, null,
+                null, null, null);
     }
 
     @Override
-    public StudentRoom find(int id) {
-        for(StudentRoom studentRoom : studentRooms)
+    public Call<StudentRoom> find(int id) {
+/*        for(StudentRoom studentRoom : studentRooms)
             if(studentRoom.getId() == id)
-                return studentRoom;
-        return null;
+                return studentRoom;*/
+        return studentRoomService.getStudentRoomById(id);
     }
 
     @Override
-    public ArrayList<StudentRoom> where(Predicate<StudentRoom> predicate) {
+    public Call<PagedResult<StudentRoom>> where(Predicate<StudentRoom> predicate) {
         ArrayList<StudentRoom> corresponding = new ArrayList<>();
 
         for(StudentRoom studentRoom : studentRooms)
             if(predicate.verify(studentRoom))
                 corresponding.add(studentRoom);
 
-        return corresponding;
+        return null;
     }
 
     @Override
@@ -64,23 +92,22 @@ public class StudentRoomDAO implements StudentRoomDataAccess
 
     @Override
     public void delete(StudentRoom studentRoom) {
-        StudentRoom foundStudentRoom = find(studentRoom.getId());
-        studentRooms.remove(foundStudentRoom);
+        /*StudentRoom foundStudentRoom = find(studentRoom.getId());*/
+        /*studentRooms.remove(foundStudentRoom);*/
     }
 
     @Override
-    public ArrayList<StudentRoom> getAllLikedBy(User user) {
-        ArrayList<StudentRoom> likedStudentRooms = new ArrayList<>();
-        for(StudentRoom studentRoom : studentRooms)
-            for(Like like : studentRoom.getLikes())
-                if(user.getLikes().contains(like))
-                    likedStudentRooms.add(studentRoom);
-        return likedStudentRooms;
+    public ArrayList<StudentRoom> getAllLikedBy(int userId) {
+        return null;
     }
 
     @Override
-    public boolean isLikedBy(StudentRoom studentRoom, User user) {
-        return getAllLikedBy(user).contains(studentRoom);
+    public Call<PagedResult<StudentRoom>> getStudentRooms(Integer pageIndex, Integer pageSize,
+                                                          Integer cityId, Integer minPrice,
+                                                          Integer maxPrice, Long startDate,
+                                                          Long endDate) {
+        return studentRoomService.getStudentRooms(pageIndex, pageSize, cityId, minPrice, maxPrice,
+                startDate, endDate);
     }
 
 

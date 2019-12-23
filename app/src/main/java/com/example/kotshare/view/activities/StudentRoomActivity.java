@@ -1,26 +1,15 @@
 package com.example.kotshare.view.activities;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kotshare.R;
-import com.example.kotshare.data_access.StudentRoomDAO;
-import com.example.kotshare.data_access.StudentRoomDataAccess;
+import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.view.recycler_views.CharacteristicStudentRoom;
 import com.example.kotshare.view.recycler_views.CharacteristicsAdapter;
@@ -36,9 +25,13 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StudentRoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -46,10 +39,16 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
     @BindView(R.id.textView_singleStudentRoomTitle)
     TextView textView_singleStudentRoomTitle;
 
+    @BindView(R.id.localisation)
+    TextView textView_localisation;
+
+    @BindView(R.id.textView_description)
+    TextView textView_description;
+
     @BindView(R.id.imageSlider)
     SliderView sliderStudentRoom;
     private StudentRoom studentRoom;
-    private StudentRoomDataAccess studentRoomDataAccess;
+    private StudentRoomController studentRoomController;
 
     /*
     @BindView(R.id.phone)
@@ -66,7 +65,7 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
 
     public StudentRoomActivity()
     {
-        this.studentRoomDataAccess = new StudentRoomDAO();
+        this.studentRoomController = new StudentRoomController();
     }
 
     @Override
@@ -75,32 +74,72 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         int id = getIntent().getIntExtra(getString(R.string.STUDENT_ROOM_ID), -1);
 
         // Slider
-        if(id != -1)
-        {
-            studentRoom = studentRoomDataAccess.find(id);
+        new Thread(() -> {
+            if(id != -1)
+            {
+                Call<StudentRoom> studentRoomCall = studentRoomController.find(id);
+                Callback<StudentRoom> callback = new Callback<StudentRoom>() {
+                    @Override
+                    public void onResponse(Call<StudentRoom> call, Response<StudentRoom> response) {
+                        if(response.isSuccessful()) {
+                            studentRoom = response.body();
+                            initView();
+                        }
+                    }
 
-            if(studentRoom != null) {
-                setContentView(R.layout.activity_student_room);
+                    @Override
+                    public void onFailure(Call<StudentRoom> call, Throwable t) {
 
-                ButterKnife.bind(this);
+                    }
+                };
+                studentRoomCall.enqueue(callback);
 
-                textView_singleStudentRoomTitle.setText(studentRoom.getTitle());
-
-                sliderStudentRoom.setSliderAdapter(new SliderPhotosAdapter(this.getApplicationContext()));
-                sliderStudentRoom.startAutoCycle();
-                sliderStudentRoom.setIndicatorAnimation(IndicatorAnimations.WORM);
-                sliderStudentRoom.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
             }
-        }
+        }).start();
 
         // Characteristics
+    }
+
+    private void initView()
+    {
+        setContentView(R.layout.activity_student_room);
+        ButterKnife.bind(StudentRoomActivity.this);
+        textView_singleStudentRoomTitle.setText(studentRoom.getTitle());
+        textView_localisation.setText(studentRoom.getCity().toString());
+
+        if(studentRoom.getDescription() == null)
+            textView_description.setText(getString(R.string.no_description));
+        else
+            textView_description.setText(studentRoom.getDescription());
+
+        sliderStudentRoom.setSliderAdapter(new SliderPhotosAdapter(StudentRoomActivity.this));
+        sliderStudentRoom.startAutoCycle();
+        sliderStudentRoom.setIndicatorAnimation(IndicatorAnimations.WORM);
+        sliderStudentRoom.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+
         ArrayList<CharacteristicStudentRoom> characteristics = new ArrayList<>();
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_coin, "360€ /mois"));
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_bathtub, "Salle de bain partagée"));
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_kitchen, "Cuisine partagée"));
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_tree, "Jardin accessible"));
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_roommate, "4 colocataires"));
-        characteristics.add(new CharacteristicStudentRoom(R.drawable.ic_wifi, "Wifi compris"));
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_coin, String.format(
+                        getString(R.string.price_format),
+                        String.format(Locale.FRENCH, "%.2f", studentRoom.getMonthlyPrice())
+                )
+        ));
+
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_bathtub, getString(studentRoom.getPersonnalBathroom() ?
+                R.string.private_bathroom : R.string.shared_bathroom) ));
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_kitchen, getString(studentRoom.getPersonnalKitchen() ?
+                R.string.private_kitchen : R.string.shared_kitchen)));
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_tree, getString(studentRoom.getHasGarden() ?
+                R.string.accessible_garden : R.string.no_garden)));
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_roommate, String.format(getString(R.string.roommates_number),
+                studentRoom.getNumberRoommate())));
+        characteristics.add(new CharacteristicStudentRoom(
+                R.drawable.ic_wifi, getString(studentRoom.getFreeWifi() ?
+                R.string.included_wifi : R.string.not_included_wifi)));
 
         characteristicsRecyclerView.setHasFixedSize(true);
         characteristicsLayoutManager = new LinearLayoutManager(this);
@@ -119,10 +158,21 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap)
     {
         mapAPI = googleMap;
-        LatLng aubel = new LatLng(50.6970841, 5.8245657);
-        mapAPI.addMarker(new MarkerOptions().position(aubel).title("Aubel"));
+        LatLng city = new LatLng(studentRoom.getLat(), studentRoom.getLong());
+        mapAPI.addMarker(new MarkerOptions().position(city).title(studentRoom.getCity().getName()));
         float zoom = (float)11.0;
-        mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(aubel, zoom));
+        mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(city, zoom));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        super.onBackPressed();
+        return true;
     }
 
     /*

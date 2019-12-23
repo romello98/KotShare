@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.kotshare.R;
+import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.view.activities.LoginActivity;
 
 public class LogoutFragment extends Fragment {
@@ -21,15 +22,7 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
-                getString(R.string.PREFERENCES_FILE),
-                Context.MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.remove(getString(R.string.USER_ID));
-        editor.remove(getString(R.string.USER_CREDENTIALS_EXPIRING_TIME));
-        editor.apply();
+        SharedPreferencesAccessor.getInstance().logout(getContext());
         startActivity(intent);
         return null;
     }

@@ -40,10 +40,17 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="OnPrimaryText" parent="DefaultText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/onPrimary</item>
+        <item name="android:foreground">@color/onPrimary</item>
+    </style>
+
     <style name="LittleHeading">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="LoginEditText">
