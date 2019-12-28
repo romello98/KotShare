@@ -25,7 +25,9 @@ import com.example.kotshare.model.City;
 import com.example.kotshare.model.Like;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.utils.Validator;
 import com.example.kotshare.view.SharedPreferencesAccessor;
+import com.example.kotshare.view.Utils;
 import com.example.kotshare.view.recycler_views.GenericRecyclerViewAdapter;
 import com.example.kotshare.view.recycler_views.StudentRoomsViewHolderTypes;
 import com.example.kotshare.view.recycler_views.Util;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
     private GenericRecyclerViewAdapter<StudentRoom> studentRoomGenericRecyclerViewAdapter;
     private View.OnScrollChangeListener onScrollChangeListener;
     private SharedPreferencesAccessor sharedPreferencesAccessor;
+    private Validator validator;
 
     private ArrayList<StudentRoom> studentRooms;
     private List<Integer> studentRoomsIdsLiked;
@@ -109,6 +112,7 @@ public class HomeFragment extends Fragment {
         this.cityController = new CityController();
         this.likeController = new LikeController();
         this.sharedPreferencesAccessor = SharedPreferencesAccessor.getInstance();
+        this.validator = Validator.getInstance(getContext());
 
         ButterKnife.bind(this, root);
         studentRoomGenericRecyclerViewAdapter = new GenericRecyclerViewAdapter<>(studentRooms,
@@ -139,8 +143,30 @@ public class HomeFragment extends Fragment {
 
         scrollView_home.setOnScrollChangeListener(onScrollChangeListener);
         button_searchForm.setOnClickListener(view -> {
-            initRecyclerView();
-            loadNextItems();
+            String dateMin = editText_searchFormDateMin.getText().toString();
+            String dateMax = editText_searchFormDateMax.getText().toString();
+            ArrayList<String> dateMinErrors = new ArrayList<>(validator.validateDate(dateMin));
+            ArrayList<String> dateMaxErrors = new ArrayList<>(validator.validateDate(dateMax));
+
+            if(dateMinErrors.size() == 0 && dateMaxErrors.size() == 0) {
+                initRecyclerView();
+                loadNextItems();
+            }
+            else {
+                StringBuilder stringBuilder = new StringBuilder();
+                if(dateMinErrors.size() > 0) {
+                    for (String error : dateMinErrors)
+                        stringBuilder.append(getString(R.string.date_min))
+                                .append(" : ").append(error).append("\n\n");
+                }
+                if(dateMaxErrors.size() > 0){
+                    for(String error : dateMaxErrors)
+                        stringBuilder.append(getString(R.string.date_max))
+                                .append(" : ").append(error).append("\n\n");
+                }
+                Utils.showDialog(getActivity(), getString(R.string.error_date_format),
+                        stringBuilder.toString());
+            }
         });
 
         return root;
@@ -161,13 +187,18 @@ public class HomeFragment extends Fragment {
 
         new Thread(() ->
         {
+            Integer cityId = getCityChoice(spinner_searchFormPlace);
+            Integer minPrice = getInteger(editText_searchFormMinPrice);
+            Integer maxPrice = getInteger(editText_searchFormMaxPrice);
+            Long minDateSeconds = getDateMilliseconds(editText_searchFormDateMin);
+            Long maxDateSeconds =  getDateMilliseconds(editText_searchFormDateMax);
             Call<PagedResult<StudentRoom>> call = studentRoomController.getStudentRooms(
                     pageIndexToLoad, PAGE_SIZE,
-                    getCityChoice(spinner_searchFormPlace),
-                    getInteger(editText_searchFormMinPrice),
-                    getInteger(editText_searchFormMaxPrice),
-                    getDateMilliseconds(editText_searchFormDateMin),
-                    getDateMilliseconds(editText_searchFormDateMax));
+                    cityId,
+                    minPrice,
+                    maxPrice,
+                    minDateSeconds,
+                    maxDateSeconds);
             call.enqueue(new Callback<PagedResult<StudentRoom>>() {
                 @Override
                 public void onResponse(Call<PagedResult<StudentRoom>> call, Response<PagedResult<StudentRoom>> response) {
@@ -181,7 +212,7 @@ public class HomeFragment extends Fragment {
                         studentRoomGenericRecyclerViewAdapter
                                 .notifyItemRangeInserted(pageIndexToLoad * PAGE_SIZE, PAGE_SIZE);
                         isCurrentlyLoading = false;
-                        isMaximumCountReached = pageIndexToLoad * (PAGE_SIZE + 1) >= pagedResult.getTotalCount();
+                        isMaximumCountReached = (pageIndexToLoad + 1) * PAGE_SIZE >= pagedResult.getTotalCount();
                         if (isMaximumCountReached) scrollView_home.setOnScrollChangeListener(null);
                     } else Toast.makeText(getContext(), "Une erreur est survenue",
                             Toast.LENGTH_SHORT).show();
@@ -207,11 +238,11 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<City>> call, Response<List<City>> response) {
                 if(response.isSuccessful()) {
                     List<City> cities = new ArrayList<>();
-                    City allCities = new City();
+                    City defaultCityChoice = new City();
                     ArrayAdapter<City> adapter;
 
-                    allCities.setName("Toutes les villes");
-                    cities.add(allCities);
+                    defaultCityChoice.setName(HomeFragment.this.getString(R.string.all_cities));
+                    cities.add(defaultCityChoice);
                     cities.addAll(response.body());
                     adapter = new ArrayAdapter<>(HomeFragment.this.getContext(),
                             android.R.layout.simple_spinner_item, cities.toArray(new City[0]));

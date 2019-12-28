@@ -10,10 +10,14 @@ import java.util.HashSet;
 import java.util.Map;
 
 import com.example.kotshare.R;
+import com.example.kotshare.controller.UserController;
+import com.example.kotshare.model.User;
 import com.example.kotshare.model.UserForm;
 
 public class Validator
 {
+    private UserController userController = new UserController();
+
     public static final int PASSWORD_MIN_LENGTH = 8;
     public static final int PASSWORD_MIN_UPPERCASE = 1;
     public static final int PASSWORD_MIN_LOWERCASE = 1;
@@ -72,6 +76,11 @@ public class Validator
         return validate(phoneNumberValidityConditions, phoneNumber);
     }
 
+    public HashSet<String> validateDate(String date)
+    {
+        return validate(dateValidityConditions, date);
+    }
+
     public ArrayList<String> validateForm(UserForm userForm, String passwordConfirmation)
     {
         ArrayList<String> errors = new ArrayList<>();
@@ -106,7 +115,7 @@ public class Validator
 
     private boolean isValidDate(String date)
     {
-        return date != null && date.matches("\\d{2}/\\d{2}/\\d{4}");
+        return date != null && (date.isEmpty() || date.matches("\\d{2}/\\d{2}/\\d{4}"));
     }
 
     private <T> HashSet<String> validate(HashMap<String, Validable<T>> validityConditions, T data)

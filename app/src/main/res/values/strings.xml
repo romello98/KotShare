@@ -92,5 +92,8 @@
     <string name="error_unknown">Erreur inconnue</string>
     <string name="error_unknown_happened">Une erreur d\'origine inconnue est survenue</string>
     <string name="select_school">Sélectionnez une école</string>
+    <string name="all_cities">Toutes les villes</string>
+    <string name="date_min">Date minimale</string>
+    <string name="date_max">Date maximale</string>
 
 </resources>
