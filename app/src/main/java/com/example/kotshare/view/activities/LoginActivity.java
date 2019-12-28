@@ -21,7 +21,7 @@ import com.example.kotshare.model.User;
 import com.example.kotshare.model.UserForm;
 import com.example.kotshare.utils.Validator;
 import com.example.kotshare.view.SharedPreferencesAccessor;
-import com.example.kotshare.view.Utils;
+import com.example.kotshare.utils.ViewUtils;
 import com.example.kotshare.view.fragments.LoginFragment;
 import com.example.kotshare.view.fragments.SignupFragment;
 
@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private View.OnClickListener onLoginButtonPressed;
     private View.OnClickListener onSignupButtonPressed;
     private boolean isLoginFormDisplayed = true;
+    private ArrayList<String> errors;
 
     private Token token;
 
@@ -86,11 +87,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
-                    if(!Utils.isConnected(LoginActivity.this))
-                        Utils.alertNoInternetConnection(LoginActivity.this,
+                    if(!ViewUtils.isConnected(LoginActivity.this))
+                        ViewUtils.alertNoInternetConnection(LoginActivity.this,
                                 getCurrentFocus());
                     else
-                        Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
                                 getString(R.string.error_unknown));
                     loadLoginView();
                 }
@@ -108,45 +109,15 @@ public class LoginActivity extends AppCompatActivity {
     private void defineEvents()
     {
         onLoginButtonPressed = view -> {
-            if(!Utils.isConnected(this)) {
-                Utils.alertNoInternetConnection(this, view);
+
+            if(!ViewUtils.isConnected(this)) {
+                ViewUtils.alertNoInternetConnection(this, view);
                 return;
             }
 
-            Login login = loginFragment.getLoginForm();
-            Thread tokenThread = new Thread(() -> {
-                Call<Token> tokenCall = authenticationService.getToken(login);
-                try {
-                    Response<Token> response = tokenCall.execute();
-                    if(response.isSuccessful()) {
-                        token = response.body();
-                        ServicesConfiguration.getInstance().setToken(token);
-                    }
-                    else
-                    {
-                        Log.i("app", response.message());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    if(!Utils.isConnected(LoginActivity.this))
-                        Utils.alertNoInternetConnection(LoginActivity.this, view);
-                    else
-                        Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
-                                getString(R.string.error_unknown));
-                }
-            });
-            tokenThread.start();
-
-            try {
-                tokenThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if(token != null) {
-                if(Utils.isConnected(this))
-                    new Thread(() -> {
-                    Call<User> foundUserCall = userController.find(token.getUserId());
+            Thread connectUser = new Thread(() -> {
+                if(token != null && ViewUtils.isConnected(this)) {
+                        Call<User> foundUserCall = userController.find(token.getUserId());
                     try {
                         Response<User> response = foundUserCall.execute();
                         if (response.isSuccessful()) {
@@ -163,61 +134,116 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
-                        if(!Utils.isConnected(LoginActivity.this))
-                            Utils.alertNoInternetConnection(this, view);
+                        if(!ViewUtils.isConnected(LoginActivity.this))
+                            ViewUtils.alertNoInternetConnection(this, view);
                         else
-                            Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                            ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
                                     getString(R.string.error_unknown));
                     }
-                }).start();
+                }
                 else
-                    Utils.alertNoInternetConnection(this, view);
-            }
+                    ViewUtils.alertNoInternetConnection(this, view);
+            });
+
+            Login login = loginFragment.getLoginForm();
+            Thread tokenThread = new Thread(() -> {
+                Call<Token> tokenCall = authenticationService.getToken(login);
+                try {
+                    Response<Token> response = tokenCall.execute();
+                    if(response.isSuccessful()) {
+                        token = response.body();
+                        ServicesConfiguration.getInstance().setToken(token);
+                        connectUser.start();
+                    }
+                    else
+                    {
+                        Log.i("app", response.message());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if(!ViewUtils.isConnected(LoginActivity.this))
+                        ViewUtils.alertNoInternetConnection(LoginActivity.this, view);
+                    else
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                getString(R.string.error_unknown));
+                }
+            });
+
+            tokenThread.start();
         };
 
         onSignupButtonPressed = view -> {
             UserForm userForm = signupFragment.getUserForm();
-            ArrayList<String> errors = Validator.getInstance(LoginActivity.this)
-                    .validateForm(userForm, signupFragment.getPasswordConfirmation());
 
-            if(!errors.isEmpty())
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-                String dialogTitle = getString(R.string.errors_title);
+            Thread signupUser = new Thread(() -> {
+                Call<User> call = userController.signup(userForm);
+                try {
+                    Response<User> response = call.execute();
+                    if(response.isSuccessful())
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.success),
+                                getString(R.string.success_account_creating));
+                    else
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_request),
+                                getString(R.string.error_request_client));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if(e instanceof NoConnectivityException)
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_network),
+                                getString(R.string.error_connection));
+                    else
+                        ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                getString(R.string.error_unknown_happened));
+                }
+            });
 
-                for(int i = 0; i < errors.size() - 1; i++)
-                    stringBuilder.append(errors.get(i) +"\n\n");
-                stringBuilder.append(errors.get(errors.size() - 1));
+            Thread verifyUserNotExists = new Thread(() -> {
+               Call<Boolean> call = userController.emailExists(userForm.getEmail());
+                try {
+                    Response<Boolean> response = call.execute();
+                    errors = Validator.getInstance(LoginActivity.this)
+                            .validateForm(userForm, signupFragment.getPasswordConfirmation());
 
-                Utils.showDialog(LoginActivity.this, dialogTitle,
-                        stringBuilder.toString());
-            }
-            else
-            {
-                if(Utils.isConnected(this))
-                    new Thread(() -> {
-                    Call<User> call = userController.signup(userForm);
-                    try {
-                        Response<User> response = call.execute();
-                        if(response.isSuccessful())
-                            Utils.showDialog(LoginActivity.this, getString(R.string.success),
-                                    getString(R.string.success_account_creating));
+                    if(response.isSuccessful())
+                    {
+                        boolean emailExists = response.body();
+                        if(emailExists)
+                            errors.add(getString(R.string.email_already_exists));
+                        if(!errors.isEmpty())
+                        {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            String dialogTitle = getString(R.string.errors_title);
+
+                            for(int i = 0; i < errors.size() - 1; i++)
+                                stringBuilder.append(errors.get(i)).append("\n\n");
+                            stringBuilder.append(errors.get(errors.size() - 1));
+
+                            ViewUtils.showDialog(LoginActivity.this, dialogTitle,
+                                    stringBuilder.toString());
+                        }
                         else
-                            Utils.showDialog(LoginActivity.this, getString(R.string.error_request),
+                        {
+                            if(ViewUtils.isConnected(this))
+                                signupUser.start();
+                            else
+                                ViewUtils.alertNoInternetConnection(this, view);
+                        }
+                    }
+                    else
+                    {
+                        if(response.code() >= 400 && response.code() < 500)
+                            ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_request),
                                     getString(R.string.error_request_client));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        if(e instanceof NoConnectivityException)
-                            Utils.showDialog(LoginActivity.this, getString(R.string.error_network),
-                                    getString(R.string.error_connection));
                         else
-                            Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                            ViewUtils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
                                     getString(R.string.error_unknown_happened));
                     }
-                }).start();
-                else
-                    Utils.alertNoInternetConnection(this, view);
-            }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            verifyUserNotExists.start();
         };
 
         loginFragment = new LoginFragment();

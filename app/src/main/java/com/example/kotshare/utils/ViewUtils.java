@@ -1,4 +1,4 @@
-package com.example.kotshare.view;
+package com.example.kotshare.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.kotshare.R;
-import com.example.kotshare.view.activities.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
-public class Utils {
+public class ViewUtils {
 
     public static ViewGroup getParent(View view) {
         return (ViewGroup)view.getParent();

@@ -1,7 +1,7 @@
 package com.example.kotshare.data_access.services;
 
 import com.example.kotshare.model.Like;
-import com.example.kotshare.model.LikeForm;
+import com.example.kotshare.model.LikeDataModel;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public interface LikeService
     Call<Void> unlike(@Path("userId") int userId, @Path("studentRoomId") int studentRoomId);
 
     @POST("Like")
-    Call<Like> sendLike(@Body LikeForm likeForm);
+    Call<Like> sendLike(@Body LikeDataModel likeDataModel);
 }

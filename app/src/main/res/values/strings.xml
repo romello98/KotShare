@@ -95,5 +95,7 @@
     <string name="all_cities">Toutes les villes</string>
     <string name="date_min">Date minimale</string>
     <string name="date_max">Date maximale</string>
+    <string name="email_already_exists">L\'email entré existe déjà.</string>
+    <string name="no_vote">Aucune note</string>
 
 </resources>

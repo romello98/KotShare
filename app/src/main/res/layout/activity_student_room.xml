@@ -37,6 +37,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
+                android:maxLines="2"
                 android:text="Bruxelles, Belgique"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -190,6 +191,18 @@
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12"></fragment>
+
+            <TextView
+                android:id="@+id/textView_ratingMean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Note/5"
+                android:textAppearance="@style/LittleHeading"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/ratingStars"
+                app:layout_constraintStart_toEndOf="@+id/ratingStars"
+                app:layout_constraintTop_toTopOf="@+id/ratingStars" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -3,7 +3,7 @@ package com.example.kotshare.data_access;
 import com.example.kotshare.data_access.services.LikeService;
 import com.example.kotshare.data_access.services.ServicesConfiguration;
 import com.example.kotshare.model.Like;
-import com.example.kotshare.model.LikeForm;
+import com.example.kotshare.model.LikeDataModel;
 import com.example.kotshare.model.PagedResult;
 
 import java.util.List;
@@ -28,10 +28,10 @@ public class LikeDAO implements LikeDataAccess
 
     @Override
     public Call<Like> sendLike(int userId, int studentRoomId) {
-        LikeForm likeForm = new LikeForm();
-        likeForm.setUserId(userId);
-        likeForm.setStudentRoomId(studentRoomId);
-        return likeService.sendLike(likeForm);
+        LikeDataModel likeDataModel = new LikeDataModel();
+        likeDataModel.setUserId(userId);
+        likeDataModel.setStudentRoomId(studentRoomId);
+        return likeService.sendLike(likeDataModel);
     }
 
     @Override

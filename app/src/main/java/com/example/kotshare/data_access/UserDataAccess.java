@@ -9,4 +9,5 @@ public interface UserDataAccess extends IDataAccess<User>
 {
     Call<User> getUserByEmail(String email);
     Call<User> signup(UserForm userForm);
+    Call<Boolean> emailExists(String email);
 }

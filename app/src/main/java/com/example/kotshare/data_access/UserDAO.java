@@ -1,7 +1,5 @@
 package com.example.kotshare.data_access;
 
-import android.util.Log;
-
 import com.example.kotshare.data_access.services.ServicesConfiguration;
 import com.example.kotshare.data_access.services.UserService;
 import com.example.kotshare.model.PagedResult;
@@ -38,6 +36,11 @@ public class UserDAO implements UserDataAccess
     @Override
     public Call<User> signup(UserForm userForm) {
         return userService.signup(userForm);
+    }
+
+    @Override
+    public Call<Boolean> emailExists(String email) {
+        return userService.emailExists(email);
     }
 
     @Override

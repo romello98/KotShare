@@ -13,13 +13,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.kotshare.R;
 import com.example.kotshare.controller.SchoolController;
-import com.example.kotshare.model.City;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.School;
 import com.example.kotshare.model.UserForm;
-import com.example.kotshare.view.Utils;
-import com.example.kotshare.view.nav.home.HomeFragment;
-import com.example.kotshare.view.recycler_views.Util;
+import com.example.kotshare.utils.ViewUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,9 +94,9 @@ public class SignupFragment extends Fragment
 
     private void loadSchoolsSpinner()
     {
-        if(!Utils.isConnected(getContext()))
+        if(!ViewUtils.isConnected(getContext()))
         {
-            Utils.alertNoInternetConnection(getContext(), getView());
+            ViewUtils.alertNoInternetConnection(getContext(), getView());
             return;
         }
 
@@ -125,16 +122,16 @@ public class SignupFragment extends Fragment
                 }
                 else
                 {
-                    Utils.showDialog(SignupFragment.this.getActivity(), getString(R.string.error_request),
+                    ViewUtils.showDialog(SignupFragment.this.getActivity(), getString(R.string.error_request),
                             getString(R.string.error_request_client));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                if(Utils.isConnected(SignupFragment.this.getContext()))
-                    Utils.showDialog(SignupFragment.this.getActivity(), getString(R.string.error_network),
+                if(ViewUtils.isConnected(SignupFragment.this.getContext()))
+                    ViewUtils.showDialog(SignupFragment.this.getActivity(), getString(R.string.error_network),
                         getString(R.string.error_connection));
                 else
-                    Utils.alertNoInternetConnection(SignupFragment.this.getContext(), getView());
+                    ViewUtils.alertNoInternetConnection(SignupFragment.this.getContext(), getView());
             }
         });
         loadSpinnerThread.start();

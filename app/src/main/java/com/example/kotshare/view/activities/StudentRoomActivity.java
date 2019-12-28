@@ -6,11 +6,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.kotshare.R;
+import com.example.kotshare.controller.RatingController;
 import com.example.kotshare.controller.StudentRoomController;
+import com.example.kotshare.model.Rating;
+import com.example.kotshare.model.RatingDataModel;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.utils.Calculator;
+import com.example.kotshare.utils.ViewUtils;
+import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.view.recycler_views.CharacteristicStudentRoom;
 import com.example.kotshare.view.recycler_views.CharacteristicsAdapter;
 import com.example.kotshare.view.recycler_views.SliderPhotosAdapter;
@@ -24,7 +31,10 @@ import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -32,6 +42,7 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class StudentRoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -47,8 +58,20 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
 
     @BindView(R.id.imageSlider)
     SliderView sliderStudentRoom;
+
+    @BindView(R.id.ratingStars)
+    RatingBar ratingBar;
+
+    @BindView(R.id.textView_ratingMean)
+    TextView textView_ratingMean;
+
+    private static final float STEP_SIZE = 0.5f;
+
     private StudentRoom studentRoom;
+    private Rating currentRating;
     private StudentRoomController studentRoomController;
+    private RatingController ratingController;
+    private Runnable getAllRatingsAction;
 
     /*
     @BindView(R.id.phone)
@@ -60,12 +83,15 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
     private RecyclerView.Adapter characteristicsAdapter;
     private RecyclerView.LayoutManager characteristicsLayoutManager;
 
+    private boolean isSettingRating = true;
+
     GoogleMap mapAPI;
     SupportMapFragment mapFragment;
 
     public StudentRoomActivity()
     {
         this.studentRoomController = new StudentRoomController();
+        this.ratingController = new RatingController();
     }
 
     @Override
@@ -102,7 +128,9 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         setContentView(R.layout.activity_student_room);
         ButterKnife.bind(StudentRoomActivity.this);
         textView_singleStudentRoomTitle.setText(studentRoom.getTitle());
-        textView_localisation.setText(studentRoom.getCity().toString());
+        textView_localisation.setText(studentRoom.getAddress());
+
+        loadRatingBar();
 
         if(studentRoom.getDescription() == null)
             textView_description.setText(getString(R.string.no_description));
@@ -148,6 +176,99 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         // Google map
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAPI);
         mapFragment.getMapAsync(this);
+    }
+
+    public void loadRatingBar()
+    {
+        ratingBar.setStepSize(STEP_SIZE);
+        setRating();
+        getAllRatingsAction = () -> {
+            Call<List<Float>> call = ratingController.getRatings(studentRoom.getId());
+            try {
+                Response<List<Float>> response = call.execute();
+                if(response.isSuccessful())
+                {
+                    runOnUiThread(() -> {
+                        if(response.body().size() > 0) {
+                            Float mean = Calculator.mean(response.body());
+                            textView_ratingMean.setText(mean.toString() + " / 5");
+                        } else {
+                            textView_ratingMean.setText(getString(R.string.no_vote));
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        Thread getAllRatings = new Thread(getAllRatingsAction);
+
+        getAllRatings.start();
+
+        ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
+            if(isSettingRating) return;
+            final Integer userId = SharedPreferencesAccessor.getInstance().getUser().getId();
+            final Integer studentRoomId = studentRoom.getId();
+
+            Thread addRating = new Thread(() -> {
+                Call<Rating> call = ratingController.setRating(new RatingDataModel(userId, studentRoomId, v));
+                try {
+                    Response<Rating> response = call.execute();
+                    if(!response.isSuccessful())
+                        ViewUtils.showDialog(StudentRoomActivity.this, getString(R.string.error_request),
+                                getString(R.string.error_request_client));
+                    else
+                    {
+                        new Thread(getAllRatingsAction).start();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if(ViewUtils.isConnected(StudentRoomActivity.this))
+                        ViewUtils.showDialog(StudentRoomActivity.this, getString(R.string.error_unknown),
+                                getString(R.string.error_unknown_happened));
+                    else
+                        ViewUtils.alertNoInternetConnection(StudentRoomActivity.this,
+                                ratingBar);
+                }
+            });
+
+            Thread deleteRating = new Thread(() -> {
+                Call<Void> call = ratingController.delete(userId, studentRoomId);
+                try {
+                    Response<Void> response = call.execute();
+                    if(response.isSuccessful())
+                        addRating.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            deleteRating.start();
+        });
+    }
+
+    private void setRating()
+    {
+        final Integer userId = SharedPreferencesAccessor.getInstance().getUser().getId();
+        final Integer studentRoomId = studentRoom.getId();
+        new Thread(() -> {
+            Call<Rating> call = ratingController.getRating(userId, studentRoomId);
+            try {
+                Response<Rating> response = call.execute();
+                if(response.isSuccessful())
+                {
+                    Rating rating = response.body();
+                    if(rating != null)
+                        runOnUiThread(() ->
+                        {
+                            ratingBar.setRating(rating.getRatingValue());
+                            isSettingRating = false;
+                        });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override

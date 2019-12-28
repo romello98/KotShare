@@ -26,4 +26,9 @@ public class UserController
     {
         return userDataAccess.signup(userForm);
     }
+
+    public Call<Boolean> emailExists(String email)
+    {
+        return userDataAccess.emailExists(email);
+    }
 }

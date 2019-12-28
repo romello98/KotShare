@@ -1,6 +1,6 @@
 package com.example.kotshare.model;
 
-public class LikeForm
+public class LikeDataModel
 {
     private Integer userId;
     private Integer studentRoomId;

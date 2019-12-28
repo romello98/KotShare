@@ -218,4 +218,10 @@ public class StudentRoom
     public void setLong(Double longitude) {
         this.longitude = longitude;
     }
+
+    public String getAddress()
+    {
+        return street + " " + streetNumber + "\n"
+                + city;
+    }
 }

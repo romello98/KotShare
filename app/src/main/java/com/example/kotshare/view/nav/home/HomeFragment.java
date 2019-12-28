@@ -22,12 +22,11 @@ import com.example.kotshare.controller.CityController;
 import com.example.kotshare.controller.LikeController;
 import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.model.City;
-import com.example.kotshare.model.Like;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.utils.Validator;
 import com.example.kotshare.view.SharedPreferencesAccessor;
-import com.example.kotshare.view.Utils;
+import com.example.kotshare.utils.ViewUtils;
 import com.example.kotshare.view.recycler_views.GenericRecyclerViewAdapter;
 import com.example.kotshare.view.recycler_views.StudentRoomsViewHolderTypes;
 import com.example.kotshare.view.recycler_views.Util;
@@ -37,7 +36,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -164,7 +162,7 @@ public class HomeFragment extends Fragment {
                         stringBuilder.append(getString(R.string.date_max))
                                 .append(" : ").append(error).append("\n\n");
                 }
-                Utils.showDialog(getActivity(), getString(R.string.error_date_format),
+                ViewUtils.showDialog(getActivity(), getString(R.string.error_date_format),
                         stringBuilder.toString());
             }
         });
