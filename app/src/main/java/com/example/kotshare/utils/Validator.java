@@ -46,8 +46,7 @@ public class Validator
                 this::isValidDate);
 
         phoneNumberValidityConditions.put(context.getString(R.string.error_phone_number_format),
-                (String phoneNumber) -> phoneNumber.isEmpty() || phoneNumber
-                        .matches("(((\\+|00)\\d{2}|0)\\d{9})"));
+                (String phoneNumber) -> phoneNumber.matches("(((\\+|00)\\d{2}|0)\\d{9})"));
 
     }
 
