@@ -49,10 +49,10 @@
     <string name="not_included_wifi">Wifi non-inclus</string>
 
     <!-- ERROR MESSAGES -->
-    <string name="error_password_length">Le mot de passe doit contenir au moins %$1d caractère(s).</string>
-    <string name="error_password_uppercase_letter">Le mot de passe doit contenir au moins %$1d majuscule(s).</string>
-    <string name="error_password_lowercase_letter">Le mot de passe doit contenir au moins %$1d minuscule(s).</string>
-    <string name="error_password_digits">Le mot de passe doit contenir au moins %$1d chiffres(s).</string>
+    <string name="error_password_length">Le mot de passe doit contenir au moins %1$d caractère(s).</string>
+    <string name="error_password_uppercase_letter">Le mot de passe doit contenir au moins %1$d majuscule(s).</string>
+    <string name="error_password_lowercase_letter">Le mot de passe doit contenir au moins %1$d minuscule(s).</string>
+    <string name="error_password_digits">Le mot de passe doit contenir au moins %1$d chiffres(s).</string>
 
     <string name="error_email_format">L\'email entré n\'a pas un format valide.</string>
 
@@ -67,5 +67,30 @@
     <string name="description">Description</string>
     <string name="no_description">Aucune description</string>
     <string name="localisation">Situation</string>
+    <string name="error_date_format">Le format de date entré est invalide</string>
+    <string name="create_account">Créer un compte</string>
+    <string name="signup">Créer un compte</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="firstname">Prénom</string>
+    <string name="name">Nom</string>
+    <string name="password_confirmation">Confirmation de mot de passe</string>
+    <string name="phone">Téléphone</string>
+    <string name="error_password_confirmation">Les mots de passe ne correspondent pas</string>
+    <string name="errors_title">Formulaire invalide</string>
+    <string name="no_school_selected">Veuillez sélectionner une école</string>
+    <string name="error_phone_number_format">Format de téléphone entré invalide.</string>
+    <string name="error_first_name">Veuillez entrer un prénom.</string>
+    <string name="error_last_name">Veuillez entrer un nom.</string>
+    <string name="error_network">Erreur réseau</string>
+    <string name="error_connection">La connexion a été perdue.</string>
+    <string name="error_request">Erreur de requête</string>
+    <string name="error_request_client">Une erreur est survenue en raison des informations envoyées.</string>
+    <string name="success">Succès</string>
+    <string name="success_account_creating">Votre compte a été créé avec succès. Vous pouvez désormais vous connecter.</string>
+    <string name="error_unknown">Erreur inconnue</string>
+    <string name="error_unknown_happened">Une erreur d\'origine inconnue est survenue</string>
+    <string name="select_school">Sélectionnez une école</string>
 
 </resources>

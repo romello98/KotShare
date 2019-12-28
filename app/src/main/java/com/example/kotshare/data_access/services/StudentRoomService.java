@@ -12,7 +12,6 @@ import retrofit2.http.Query;
 
 public interface StudentRoomService
 {
-    //TODO: utiliser des paramètres d'URL au lieu d'un FORMBODY
     @GET("StudentRoom")
     Call<PagedResult<StudentRoom>> getStudentRooms(@Query("pageIndex") Integer pageIndex,
                                                    @Query("pageSize") Integer pageSize,
@@ -25,6 +24,16 @@ public interface StudentRoomService
     @GET("StudentRoom/{id}")
     Call<StudentRoom> getStudentRoomById(@Path("id") Integer id);
 
-    @POST
+    @POST("StudentRoom")
     Call<StudentRoom> addStudentRoom(@Body StudentRoom studentRoom);
+
+    @GET("StudentRoom/own")
+    Call<PagedResult<StudentRoom>> getOwnStudentRooms(@Query("userId") Integer userId,
+                                                      @Query("pageIndex") Integer pageIndex,
+                                                      @Query("pageSize") Integer pageSize);
+
+    @GET("StudentRoom/favorite")
+    Call<PagedResult<StudentRoom>> getFavoriteStudentRooms(@Query("userId") Integer userId,
+                                                           @Query("pageIndex") Integer pageIndex,
+                                                           @Query("pageSize") Integer pageSize);
 }

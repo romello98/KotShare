@@ -15,6 +15,7 @@ import com.example.kotshare.R;
 import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.data_access.StudentRoomDAO;
 import com.example.kotshare.data_access.StudentRoomDataAccess;
+import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.view.recycler_views.BindLogic;
@@ -27,6 +28,9 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyStudentRoomsFragment extends Fragment {
 
@@ -51,19 +55,37 @@ public class MyStudentRoomsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Thread retrieveStudentRoomsThread;
         GenericRecyclerViewAdapter.ViewHolderDispatcher<StudentRoom> viewHolderDispatcher =
                 item -> ViewHolderType.STUDENT_ROOM_SELF;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+
         myStudentRoomsViewModel =
                 ViewModelProviders.of(this).get(MyStudentRoomsViewModel.class);
         root = inflater.inflate(R.layout.fragment_my_student_rooms, container, false);
-/*        this.studentRooms = studentRoomController.where(studentRoom
-                -> sharedPreferencesAccessor.isCurrentUser(studentRoom.getUser()));*/
-
         ButterKnife.bind(this, root);
-
+        studentRooms = new ArrayList<>();
         studentRoomGenericRecyclerViewAdapter = new GenericRecyclerViewAdapter<>(studentRooms,
                 viewHolderDispatcher, studentRoomsViewHolderTypes.getTypes());
+
+        retrieveStudentRoomsThread = new Thread(() -> {
+            Call<PagedResult<StudentRoom>> call = studentRoomController.getOwnStudentRooms(
+                    sharedPreferencesAccessor.getUser().getId(), null, 100);
+            call.enqueue(new Callback<PagedResult<StudentRoom>>() {
+                @Override
+                public void onResponse(Call<PagedResult<StudentRoom>> call, Response<PagedResult<StudentRoom>> response) {
+                    studentRooms.addAll(response.body().getItems());
+                    studentRoomGenericRecyclerViewAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<PagedResult<StudentRoom>> call, Throwable t) {
+
+                }
+            });
+        });
+
+        retrieveStudentRoomsThread.start();
         recyclerView_myStudentRooms.setLayoutManager(layoutManager);
         recyclerView_myStudentRooms.setAdapter(studentRoomGenericRecyclerViewAdapter);
 

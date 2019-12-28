@@ -16,12 +16,12 @@ public class LikeController
         this.likeDataAccess = LikeDAO.getInstance();
     }
 
-    public Like sendLike(int userId, int studentRoomId)
+    public Call<Like> sendLike(int userId, int studentRoomId)
     {
         return likeDataAccess.sendLike(userId, studentRoomId);
     }
 
-    public boolean unlike(int userId, int studentRoomId)
+    public Call unlike(int userId, int studentRoomId)
     {
         return likeDataAccess.unlike(userId, studentRoomId);
     }

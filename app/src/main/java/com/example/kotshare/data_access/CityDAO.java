@@ -2,7 +2,6 @@ package com.example.kotshare.data_access;
 
 import com.example.kotshare.data_access.services.CityService;
 import com.example.kotshare.data_access.services.ServicesConfiguration;
-import com.example.kotshare.data_access.services.StudentRoomService;
 import com.example.kotshare.model.City;
 
 import java.util.List;

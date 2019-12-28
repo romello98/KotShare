@@ -6,6 +6,7 @@ import com.example.kotshare.data_access.services.ServicesConfiguration;
 import com.example.kotshare.data_access.services.UserService;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.User;
+import com.example.kotshare.model.UserForm;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,7 @@ public class UserDAO implements UserDataAccess
 
     private UserDAO()
     {
-        /*//TODO: A supprimer en production
-        users.add(new User(1, "john.doe@gmail.com", "$2a$04$hefrFckyV/5NsEitV9.KjudH4Ra6oypZxM6n3zDPwxwza6IahZ8/."));
-        users.add(new User(2, "jane.doe@gmail.com", "$2a$04$hefrFckyV/5NsEitV9.KjudH4Ra6oypZxM6n3zDPwxwza6IahZ8/."));
-        */
+
     }
 
     public static UserDAO getInstance()
@@ -35,6 +33,11 @@ public class UserDAO implements UserDataAccess
     @Override
     public Call<User> getUserByEmail(String email) {
         return null;
+    }
+
+    @Override
+    public Call<User> signup(UserForm userForm) {
+        return userService.signup(userForm);
     }
 
     @Override
@@ -53,7 +56,6 @@ public class UserDAO implements UserDataAccess
 
     @Override
     public Call<User> find(int id) {
-        Log.i("app", "TOKEN RETRIEVED: " );
         return userService.getUserById(id);
     }
 

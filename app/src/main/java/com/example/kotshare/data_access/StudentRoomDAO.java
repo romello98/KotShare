@@ -15,21 +15,10 @@ public class StudentRoomDAO implements StudentRoomDataAccess
 
     //TODO: Supprimer
     private static StudentRoomDAO studentRoomDAO;
-    private UserDataAccess userDataAccess;
-    private LikeDataAccess likeDataAccess;
-    private ArrayList<StudentRoom> studentRooms;
     private StudentRoomService studentRoomService;
 
     private StudentRoomDAO()
     {
-        /*OkHttpClient httpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(StudentRoomService.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
-                .build();
-        studentRoomService = retrofit.create(StudentRoomService.class);*/
         this.studentRoomService = ServicesConfiguration.getInstance().getRetrofit()
                 .create(StudentRoomService.class);
     }
@@ -40,24 +29,9 @@ public class StudentRoomDAO implements StudentRoomDataAccess
         return studentRoomDAO;
     }
 
-    public void init()
-    {
-        /*this.userDataAccess = UserDAO.getInstance();
-        this.likeDataAccess = LikeDAO.getInstance();
-        if(studentRooms == null)
-            this.studentRooms = new ArrayList<>(Arrays.asList(
-                new StudentRoom(1, "Kot appartenant à John", 300., userDataAccess.find(1)),
-                new StudentRoom(2, "Kot appartenant à Jane", 450., userDataAccess.find(2)),
-                new StudentRoom(3, "Kot non liké", 540., userDataAccess.find(1)),
-                new StudentRoom(4, "Kot supplémentaire", 540., userDataAccess.find(2))
-            ));*/
-    }
-
-
     @Override
     public StudentRoom add(StudentRoom studentRoom) {
-        studentRooms.add(studentRoom);
-        return studentRoom;
+        return null;
     }
 
     @Override
@@ -68,20 +42,11 @@ public class StudentRoomDAO implements StudentRoomDataAccess
 
     @Override
     public Call<StudentRoom> find(int id) {
-/*        for(StudentRoom studentRoom : studentRooms)
-            if(studentRoom.getId() == id)
-                return studentRoom;*/
         return studentRoomService.getStudentRoomById(id);
     }
 
     @Override
     public Call<PagedResult<StudentRoom>> where(Predicate<StudentRoom> predicate) {
-        ArrayList<StudentRoom> corresponding = new ArrayList<>();
-
-        for(StudentRoom studentRoom : studentRooms)
-            if(predicate.verify(studentRoom))
-                corresponding.add(studentRoom);
-
         return null;
     }
 
@@ -92,8 +57,6 @@ public class StudentRoomDAO implements StudentRoomDataAccess
 
     @Override
     public void delete(StudentRoom studentRoom) {
-        /*StudentRoom foundStudentRoom = find(studentRoom.getId());*/
-        /*studentRooms.remove(foundStudentRoom);*/
     }
 
     @Override
@@ -108,6 +71,18 @@ public class StudentRoomDAO implements StudentRoomDataAccess
                                                           Long endDate) {
         return studentRoomService.getStudentRooms(pageIndex, pageSize, cityId, minPrice, maxPrice,
                 startDate, endDate);
+    }
+
+    @Override
+    public Call<PagedResult<StudentRoom>> getOwnStudentRooms(Integer userId, Integer pageIndex,
+                                                             Integer pageSize) {
+        return studentRoomService.getOwnStudentRooms(userId, pageIndex, pageSize);
+    }
+
+    @Override
+    public Call<PagedResult<StudentRoom>> getFavoriteStudentRooms(Integer userId, Integer pageIndex,
+                                                                  Integer pageSize) {
+        return studentRoomService.getFavoriteStudentRooms(userId, pageIndex, pageSize);
     }
 
 

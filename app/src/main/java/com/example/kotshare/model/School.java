@@ -39,4 +39,9 @@ public class School
     public void setUsers(HashSet<User> users) {
         this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return name == null ? "École inconnue" : name;
+    }
 }

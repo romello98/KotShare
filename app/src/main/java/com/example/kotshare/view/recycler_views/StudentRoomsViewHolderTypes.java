@@ -20,6 +20,10 @@ import com.example.kotshare.view.activities.StudentRoomActivity;
 import java.util.HashMap;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class StudentRoomsViewHolderTypes
 {
     private StudentRoomController studentRoomController;
@@ -70,24 +74,50 @@ public class StudentRoomsViewHolderTypes
                     Drawable favoriteFilled = context.getDrawable(R.drawable.ic_favorite_filled_24dp);
                     Drawable favoriteEmpty = context.getDrawable(R.drawable.ic_favorite_empty_24dp);
                     boolean isLikedByUser = studentRoom.isLiked();
-                    if(isLikedByUser)
+                    if (isLikedByUser)
                         editButton.setImageDrawable(favoriteFilled);
                     else
                         editButton.setImageDrawable(favoriteEmpty);
 
                     editButton.setOnClickListener(e ->
-                    {
-                        if(likeController.isLikedBy(studentRoom.getId(), user.getId()))
-                        {
-                            boolean hasUnliked = likeController.unlike(user.getId(), studentRoom.getId());
-                            if(hasUnliked) editButton.setImageDrawable(favoriteEmpty);
-                        }
-                        else
-                        {
-                            Like like = likeController.sendLike(user.getId(), studentRoom.getId());
-                            if(like != null) editButton.setImageDrawable(favoriteFilled);
-                        }
-                    });}));
+                            new Thread(() -> {
+                                if (studentRoom.isLiked()) {
+                                    Call call = likeController.unlike(user.getId(),
+                                            studentRoom.getId());
+                                    call.enqueue(new Callback() {
+                                        @Override
+                                        public void onResponse(Call call, Response response) {
+                                            if(response.code() == 200) {
+                                                editButton.setImageDrawable(favoriteEmpty);
+                                                studentRoom.setLiked(false);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call call, Throwable t) {
+
+                                        }
+                                    });
+                                } else {
+                                    Call call = likeController.sendLike(user.getId(), studentRoom.getId());
+                                    call.enqueue(new Callback() {
+                                        @Override
+                                        public void onResponse(Call call, Response response) {
+                                            if(response.isSuccessful()) {
+                                                editButton.setImageDrawable(favoriteFilled);
+                                                studentRoom.setLiked(true);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+                            }).start());
+                })
+        );
     }
 
     public HashMap<ViewHolderType, BindLogic<StudentRoom>> getTypes()

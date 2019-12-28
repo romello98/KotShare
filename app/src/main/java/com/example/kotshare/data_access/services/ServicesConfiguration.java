@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServicesConfiguration
 {
-    public static final String BASE_URL = "https://10.0.2.2:5001/";
+    private static final String BASE_URL = "https://10.0.2.2:5001/";
     private static ServicesConfiguration servicesConfiguration;
     private Token token;
     private Retrofit retrofit;

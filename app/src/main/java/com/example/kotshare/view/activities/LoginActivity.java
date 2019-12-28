@@ -5,19 +5,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.kotshare.R;
 import com.example.kotshare.controller.UserController;
 import com.example.kotshare.data_access.services.AuthenticationService;
 import com.example.kotshare.data_access.services.ServicesConfiguration;
 import com.example.kotshare.data_access.services.Token;
+import com.example.kotshare.exceptions.NoConnectivityException;
 import com.example.kotshare.model.Login;
 import com.example.kotshare.model.User;
+import com.example.kotshare.model.UserForm;
+import com.example.kotshare.utils.Validator;
 import com.example.kotshare.view.SharedPreferencesAccessor;
+import com.example.kotshare.view.Utils;
+import com.example.kotshare.view.fragments.LoginFragment;
+import com.example.kotshare.view.fragments.SignupFragment;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,14 +43,23 @@ public class LoginActivity extends AppCompatActivity {
 
     User foundUser;
 
-    @BindView(R.id.editTextEmail)
-    EditText email;
+    @BindView(R.id.actionButton)
+    Button actionButton;
 
-    @BindView(R.id.editTextPassword)
-    EditText password;
+    @BindView(R.id.switchButton)
+    Button switchButton;
 
-    @BindView(R.id.buttonLogin)
-    Button buttonLogin;
+    @BindView(R.id.formView)
+    FrameLayout formView;
+
+    private LoginFragment loginFragment;
+    private SignupFragment signupFragment;
+
+    private View.OnClickListener onLoginButtonPressed;
+    private View.OnClickListener onSignupButtonPressed;
+    private boolean isLoginFormDisplayed = true;
+
+    private Token token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!hasStoredUser()) {
             loadLoginView();
         } else {
-            Token token = SharedPreferencesAccessor.getInstance().getToken();
+            token = SharedPreferencesAccessor.getInstance().getToken();
             ServicesConfiguration.getInstance().setToken(token);
             Call<User> foundUserCall = userController.find(token.getUserId());
 
@@ -63,14 +81,17 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
-                    else
-                    {
-                        loadLoginView();
-                    }
+                    else loadLoginView();
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
+                    if(!Utils.isConnected(LoginActivity.this))
+                        Utils.alertNoInternetConnection(LoginActivity.this,
+                                getCurrentFocus());
+                    else
+                        Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                getString(R.string.error_unknown));
                     loadLoginView();
                 }
             });
@@ -86,64 +107,148 @@ public class LoginActivity extends AppCompatActivity {
 
     private void defineEvents()
     {
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Login login = new Login();
-                login.setEmail(email.getText().toString());
-                login.setPassword(password.getText().toString());
+        onLoginButtonPressed = view -> {
+            if(!Utils.isConnected(this)) {
+                Utils.alertNoInternetConnection(this, view);
+                return;
+            }
 
-                new Thread(() ->
-                {
-                    Call<Token> tokenCall = authenticationService.getToken(login);
-                    tokenCall.enqueue(new Callback<Token>() {
-                    @Override
-                    public void onResponse(Call<Token> call, Response<Token> response) {
-                        if(response.isSuccessful()) {
-                            Token token = response.body();
-                            ServicesConfiguration.getInstance().setToken(token);
-                            Call<User> foundUserCall = userController.find(token.getUserId());
+            Login login = loginFragment.getLoginForm();
+            Thread tokenThread = new Thread(() -> {
+                Call<Token> tokenCall = authenticationService.getToken(login);
+                try {
+                    Response<Token> response = tokenCall.execute();
+                    if(response.isSuccessful()) {
+                        token = response.body();
+                        ServicesConfiguration.getInstance().setToken(token);
+                    }
+                    else
+                    {
+                        Log.i("app", response.message());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    if(!Utils.isConnected(LoginActivity.this))
+                        Utils.alertNoInternetConnection(LoginActivity.this, view);
+                    else
+                        Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                getString(R.string.error_unknown));
+                }
+            });
+            tokenThread.start();
 
-                            foundUserCall.enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                    if(response.isSuccessful())
-                                    {
-                                        foundUser = response.body();
-                                        if (foundUser != null) {
-                                            SharedPreferencesAccessor.getInstance().updateSavedUser(LoginActivity.this, foundUser, token);
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Log.i("app", response.message());
-                                    }
-                                }
+            try {
+                tokenThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-                                    t.printStackTrace();
-                                    Toast.makeText(LoginActivity.this, "Une erreur est survenue", Toast.LENGTH_LONG);
-                                }
-                            });
-                        }
-                        else
-                        {
+            if(token != null) {
+                if(Utils.isConnected(this))
+                    new Thread(() -> {
+                    Call<User> foundUserCall = userController.find(token.getUserId());
+                    try {
+                        Response<User> response = foundUserCall.execute();
+                        if (response.isSuccessful()) {
+                            foundUser = response.body();
+                            if (foundUser != null) {
+                                SharedPreferencesAccessor.getInstance().updateSavedUser(
+                                        LoginActivity.this, foundUser, token);
+                                Intent intent = new Intent(LoginActivity.this,
+                                        MainActivity.class);
+                                startActivity(intent);
+                            }
+                        } else {
                             Log.i("app", response.message());
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        if(!Utils.isConnected(LoginActivity.this))
+                            Utils.alertNoInternetConnection(this, view);
+                        else
+                            Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                    getString(R.string.error_unknown));
                     }
-
-                    @Override
-                    public void onFailure(Call<Token> call, Throwable t) {
-                        t.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "Une erreur est survenue", Toast.LENGTH_LONG);
-                    }
-                    });
                 }).start();
+                else
+                    Utils.alertNoInternetConnection(this, view);
             }
-        });
+        };
+
+        onSignupButtonPressed = view -> {
+            UserForm userForm = signupFragment.getUserForm();
+            ArrayList<String> errors = Validator.getInstance(LoginActivity.this)
+                    .validateForm(userForm, signupFragment.getPasswordConfirmation());
+
+            if(!errors.isEmpty())
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                String dialogTitle = getString(R.string.errors_title);
+
+                for(int i = 0; i < errors.size() - 1; i++)
+                    stringBuilder.append(errors.get(i) +"\n\n");
+                stringBuilder.append(errors.get(errors.size() - 1));
+
+                Utils.showDialog(LoginActivity.this, dialogTitle,
+                        stringBuilder.toString());
+            }
+            else
+            {
+                if(Utils.isConnected(this))
+                    new Thread(() -> {
+                    Call<User> call = userController.signup(userForm);
+                    try {
+                        Response<User> response = call.execute();
+                        if(response.isSuccessful())
+                            Utils.showDialog(LoginActivity.this, getString(R.string.success),
+                                    getString(R.string.success_account_creating));
+                        else
+                            Utils.showDialog(LoginActivity.this, getString(R.string.error_request),
+                                    getString(R.string.error_request_client));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        if(e instanceof NoConnectivityException)
+                            Utils.showDialog(LoginActivity.this, getString(R.string.error_network),
+                                    getString(R.string.error_connection));
+                        else
+                            Utils.showDialog(LoginActivity.this, getString(R.string.error_unknown),
+                                    getString(R.string.error_unknown_happened));
+                    }
+                }).start();
+                else
+                    Utils.alertNoInternetConnection(this, view);
+            }
+        };
+
+        loginFragment = new LoginFragment();
+        signupFragment = new SignupFragment();
+        actionButton.setOnClickListener(onLoginButtonPressed);
+        switchButton.setOnClickListener(this::switchForm);
+        switchToFragment(loginFragment);
+    }
+
+    private void switchForm(View view)
+    {
+        if(isLoginFormDisplayed)
+        {
+            actionButton.setText(R.string.signup);
+            actionButton.setOnClickListener(onSignupButtonPressed);
+            switchButton.setText(R.string.log_in);
+            switchToFragment(signupFragment);
+        }
+        else
+        {
+            actionButton.setText(R.string.log_in);
+            actionButton.setOnClickListener(onLoginButtonPressed);
+            switchButton.setText(R.string.signup);
+            switchToFragment(loginFragment);
+        }
+        isLoginFormDisplayed = !isLoginFormDisplayed;
+    }
+
+    private void switchToFragment(Fragment fragment)
+    {
+        getSupportFragmentManager().beginTransaction().replace(formView.getId(), fragment).commit();
     }
 
     private boolean hasStoredUser()

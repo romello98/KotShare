@@ -10,7 +10,7 @@ import retrofit2.Call;
 
 public class CityController {
 
-    public CityDataAccess cityDataAccess;
+    private CityDataAccess cityDataAccess;
 
     public CityController()
     {

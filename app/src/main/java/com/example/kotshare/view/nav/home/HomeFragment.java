@@ -28,6 +28,7 @@ import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.view.recycler_views.GenericRecyclerViewAdapter;
 import com.example.kotshare.view.recycler_views.StudentRoomsViewHolderTypes;
+import com.example.kotshare.view.recycler_views.Util;
 import com.example.kotshare.view.recycler_views.ViewHolderType;
 
 import java.text.ParseException;
@@ -103,6 +104,7 @@ public class HomeFragment extends Fragment {
         StudentRoomsViewHolderTypes studentRoomsViewHolderTypes = StudentRoomsViewHolderTypes.getInstance();
 
         this.studentRooms = new ArrayList<>();
+        this.studentRoomsIdsLiked = new ArrayList<>();
         this.studentRoomController = new StudentRoomController();
         this.cityController = new CityController();
         this.likeController = new LikeController();
@@ -114,7 +116,7 @@ public class HomeFragment extends Fragment {
         recyclerView_allStudentRooms.setLayoutManager(layoutManager);
         recyclerView_allStudentRooms.setAdapter(studentRoomGenericRecyclerViewAdapter);
 
-        Thread initLikesThread = initCurrentUserLikes();
+        Thread initLikesThread = Util.getCurrentUserLikesThread(studentRoomsIdsLiked);
         initLikesThread.start();
 
         try {
@@ -173,8 +175,7 @@ public class HomeFragment extends Fragment {
                         PagedResult<StudentRoom> pagedResult = response.body();
                         boolean isMaximumCountReached;
 
-                        for(StudentRoom studentRoom : pagedResult.getItems())
-                            studentRoom.setLiked(studentRoomsIdsLiked.contains(studentRoom.getId()));
+                        Util.setLikes(pagedResult.getItems(), studentRoomsIdsLiked);
 
                         studentRooms.addAll(pagedResult.getItems());
                         studentRoomGenericRecyclerViewAdapter
@@ -195,6 +196,8 @@ public class HomeFragment extends Fragment {
             });
         }).start();
     }
+
+
 
     private void initSpinner()
     {
@@ -262,25 +265,5 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private Thread initCurrentUserLikes()
-    {
-        return new Thread(() -> {
-            Call<List<Integer>> likesCall = likeController
-                    .getLikesByUserId(SharedPreferencesAccessor.getInstance().getUser().getId());
-            likesCall.enqueue(new Callback<List<Integer>>() {
-                @Override
-                public void onResponse(Call<List<Integer>> call, Response<List<Integer>> response) {
-                    if(response.isSuccessful())
-                    {
-                        studentRoomsIdsLiked = response.body();
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<List<Integer>> call, Throwable t) {
-
-                }
-            });
-        });
-    }
 }

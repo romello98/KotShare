@@ -16,4 +16,10 @@ public interface StudentRoomDataAccess extends IDataAccess<StudentRoom>
     Call<PagedResult<StudentRoom>> getStudentRooms(Integer pageIndex, Integer pageSize, Integer cityId,
                                                    Integer minPrice, Integer maxPrice, Long startDate,
                                                    Long endDate);
+
+    Call<PagedResult<StudentRoom>> getOwnStudentRooms(Integer userId, Integer pageIndex,
+                                                      Integer pageSize);
+
+    Call<PagedResult<StudentRoom>> getFavoriteStudentRooms(Integer userId, Integer pageIndex,
+                                                      Integer pageSize);
 }

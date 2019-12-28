@@ -73,7 +73,6 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         int id = getIntent().getIntExtra(getString(R.string.STUDENT_ROOM_ID), -1);
 
-        // Slider
         new Thread(() -> {
             if(id != -1)
             {
@@ -96,8 +95,6 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
 
             }
         }).start();
-
-        // Characteristics
     }
 
     private void initView()
@@ -147,7 +144,6 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
 
         characteristicsRecyclerView.setLayoutManager(characteristicsLayoutManager);
         characteristicsRecyclerView.setAdapter(characteristicsAdapter);
-
 
         // Google map
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAPI);
