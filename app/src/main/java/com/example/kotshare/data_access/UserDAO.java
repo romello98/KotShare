@@ -4,7 +4,7 @@ import com.example.kotshare.data_access.services.ServicesConfiguration;
 import com.example.kotshare.data_access.services.UserService;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.User;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 
 import java.util.ArrayList;
 

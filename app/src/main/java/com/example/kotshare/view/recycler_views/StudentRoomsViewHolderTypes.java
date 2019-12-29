@@ -11,10 +11,10 @@ import androidx.cardview.widget.CardView;
 import com.example.kotshare.R;
 import com.example.kotshare.controller.LikeController;
 import com.example.kotshare.controller.StudentRoomController;
-import com.example.kotshare.model.Like;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.model.User;
 import com.example.kotshare.view.SharedPreferencesAccessor;
+import com.example.kotshare.view.activities.EditStudentRoomActivity;
 import com.example.kotshare.view.activities.StudentRoomActivity;
 
 import java.util.HashMap;
@@ -52,9 +52,10 @@ public class StudentRoomsViewHolderTypes
                 city.setText(studentRoom.getCity().toString());
                 cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(context, StudentRoomActivity.class);
-                    if(studentRoom.getId() != null)
+                    if(studentRoom.getId() != null) {
                         intent.putExtra(context.getString(R.string.STUDENT_ROOM_ID), studentRoom.getId());
-                    context.startActivity(intent);
+                        context.startActivity(intent);
+                    }
                 });
         };
 
@@ -64,22 +65,30 @@ public class StudentRoomsViewHolderTypes
                     ImageView editButton = viewHolder.itemView.findViewById(R.id.imageView_action);
                     editButton.setImageDrawable(viewHolder.itemView.getContext()
                             .getDrawable(R.drawable.ic_edit_24dp));
+                    editButton.setOnClickListener(view -> {
+                        Intent intent = new Intent(view.getContext(), EditStudentRoomActivity.class);
+                        if(studentRoom.getId() != null) {
+                            intent.putExtra(view.getContext().getString(R.string.STUDENT_ROOM_ID),
+                                    studentRoom.getId());
+                            view.getContext().startActivity(intent);
+                        }
+                    });
                 }));
 
         this.viewHolderTypesLogic.put(ViewHolderType.STUDENT_ROOM_ELSE,
                 new BindLogic<>(R.layout.student_room_recycler_view_item, (studentRoom, viewHolder) -> {
                     commonBind.bind(studentRoom, viewHolder);
                     Context context = viewHolder.itemView.getContext();
-                    ImageView editButton = viewHolder.itemView.findViewById(R.id.imageView_action);
+                    ImageView likeButton = viewHolder.itemView.findViewById(R.id.imageView_action);
                     Drawable favoriteFilled = context.getDrawable(R.drawable.ic_favorite_filled_24dp);
                     Drawable favoriteEmpty = context.getDrawable(R.drawable.ic_favorite_empty_24dp);
                     boolean isLikedByUser = studentRoom.isLiked();
                     if (isLikedByUser)
-                        editButton.setImageDrawable(favoriteFilled);
+                        likeButton.setImageDrawable(favoriteFilled);
                     else
-                        editButton.setImageDrawable(favoriteEmpty);
+                        likeButton.setImageDrawable(favoriteEmpty);
 
-                    editButton.setOnClickListener(e ->
+                    likeButton.setOnClickListener(e ->
                             new Thread(() -> {
                                 if (studentRoom.isLiked()) {
                                     Call call = likeController.unlike(user.getId(),
@@ -88,7 +97,7 @@ public class StudentRoomsViewHolderTypes
                                         @Override
                                         public void onResponse(Call call, Response response) {
                                             if(response.code() == 200) {
-                                                editButton.setImageDrawable(favoriteEmpty);
+                                                likeButton.setImageDrawable(favoriteEmpty);
                                                 studentRoom.setLiked(false);
                                             }
                                         }
@@ -104,7 +113,7 @@ public class StudentRoomsViewHolderTypes
                                         @Override
                                         public void onResponse(Call call, Response response) {
                                             if(response.isSuccessful()) {
-                                                editButton.setImageDrawable(favoriteFilled);
+                                                likeButton.setImageDrawable(favoriteFilled);
                                                 studentRoom.setLiked(true);
                                             }
                                         }

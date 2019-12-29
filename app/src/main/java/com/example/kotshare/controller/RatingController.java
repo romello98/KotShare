@@ -3,12 +3,11 @@ package com.example.kotshare.controller;
 import com.example.kotshare.data_access.RatingDAO;
 import com.example.kotshare.data_access.RatingDataAccess;
 import com.example.kotshare.model.Rating;
-import com.example.kotshare.model.RatingDataModel;
+import com.example.kotshare.model.data_model.RatingDataModel;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Path;
 
 public class RatingController
 {

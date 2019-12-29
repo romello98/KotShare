@@ -3,7 +3,7 @@ package com.example.kotshare.controller;
 import com.example.kotshare.data_access.UserDAO;
 import com.example.kotshare.data_access.UserDataAccess;
 import com.example.kotshare.model.User;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 
 import retrofit2.Call;
 

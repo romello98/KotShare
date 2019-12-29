@@ -1,7 +1,7 @@
 package com.example.kotshare.data_access.services;
 
 import com.example.kotshare.model.Like;
-import com.example.kotshare.model.LikeDataModel;
+import com.example.kotshare.model.data_model.LikeDataModel;
 
 import java.util.List;
 

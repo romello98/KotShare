@@ -1,7 +1,7 @@
 package com.example.kotshare.data_access.services;
 
 import com.example.kotshare.model.User;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

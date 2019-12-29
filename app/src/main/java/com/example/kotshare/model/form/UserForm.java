@@ -1,4 +1,4 @@
-package com.example.kotshare.model;
+package com.example.kotshare.model.form;
 
 public class UserForm
 {

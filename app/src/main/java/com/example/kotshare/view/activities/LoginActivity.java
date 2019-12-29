@@ -18,7 +18,7 @@ import com.example.kotshare.data_access.services.Token;
 import com.example.kotshare.exceptions.NoConnectivityException;
 import com.example.kotshare.model.Login;
 import com.example.kotshare.model.User;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 import com.example.kotshare.utils.Validator;
 import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.utils.ViewUtils;

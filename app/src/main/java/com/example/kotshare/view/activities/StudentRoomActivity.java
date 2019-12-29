@@ -13,7 +13,7 @@ import com.example.kotshare.R;
 import com.example.kotshare.controller.RatingController;
 import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.model.Rating;
-import com.example.kotshare.model.RatingDataModel;
+import com.example.kotshare.model.data_model.RatingDataModel;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.utils.Calculator;
 import com.example.kotshare.utils.ViewUtils;
@@ -32,7 +32,6 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.io.IOException;
-import java.lang.reflect.AccessibleObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -42,7 +41,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Body;
 
 public class StudentRoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 

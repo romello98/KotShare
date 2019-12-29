@@ -1,9 +1,7 @@
 package com.example.kotshare.utils;
 
 import android.content.Context;
-import android.service.autofill.RegexValidator;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +9,7 @@ import java.util.Map;
 
 import com.example.kotshare.R;
 import com.example.kotshare.controller.UserController;
-import com.example.kotshare.model.User;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 
 public class Validator
 {

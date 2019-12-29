@@ -15,7 +15,7 @@ import com.example.kotshare.R;
 import com.example.kotshare.controller.SchoolController;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.School;
-import com.example.kotshare.model.UserForm;
+import com.example.kotshare.model.form.UserForm;
 import com.example.kotshare.utils.ViewUtils;
 
 import java.io.IOException;

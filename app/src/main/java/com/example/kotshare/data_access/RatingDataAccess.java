@@ -1,7 +1,7 @@
 package com.example.kotshare.data_access;
 
 import com.example.kotshare.model.Rating;
-import com.example.kotshare.model.RatingDataModel;
+import com.example.kotshare.model.data_model.RatingDataModel;
 
 import java.util.List;
 

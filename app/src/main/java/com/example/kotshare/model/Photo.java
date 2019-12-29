@@ -3,19 +3,19 @@ package com.example.kotshare.model;
 public class Photo
 {
     private Integer id;
-    private Integer versionNumber;
-    private String fileName;
-    private String extension;
+    private Integer version;
+    private String name;
+    private String format;
     private StudentRoom studentRoom;
 
     public Photo(){}
 
-    public Photo(Integer id, Integer versionNumber, String fileName, String extension,
+    public Photo(Integer id, Integer version, String name, String format,
                  StudentRoom studentRoom) {
         setId(id);
-        setVersionNumber(versionNumber);
-        setFileName(fileName);
-        setExtension(extension);
+        setVersion(version);
+        setName(name);
+        setFormat(format);
         setStudentRoom(studentRoom);
     }
 
@@ -27,28 +27,28 @@ public class Photo
         this.id = id;
     }
 
-    public Integer getVersionNumber() {
-        return versionNumber;
+    public Integer getVersion() {
+        return version;
     }
 
-    public void setVersionNumber(Integer versionNumber) {
-        this.versionNumber = versionNumber;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getName() {
+        return name;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getExtension() {
-        return extension;
+    public String getFormat() {
+        return format;
     }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public StudentRoom getStudentRoom() {

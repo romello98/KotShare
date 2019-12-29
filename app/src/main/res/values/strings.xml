@@ -97,5 +97,12 @@
     <string name="date_max">Date maximale</string>
     <string name="email_already_exists">L\'email entré existe déjà.</string>
     <string name="no_vote">Aucune note</string>
+    <string name="add_student_room">Ajouter un kot</string>
+    <string name="edit_student_room">Modifier un kot</string>
+    <string name="student_room_name">Nom</string>
+    <string name="number_of_roommates">Nombre de colocataires</string>
+    <string name="photos">Photos</string>
+    <string name="select_photos">Sélectionner des photos</string>
+    <string name="delete_student_room">Supprimer ce kot</string>
 
 </resources>

@@ -10,17 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".view.activities.EditStudentRoomActivity"
+            android:parentActivityName=".view.activities.MainActivity"
+            />
         <activity
             android:name=".view.activities.StudentRoomActivity"
             android:label="@string/student_room_single"
             android:parentActivityName=".view.activities.MainActivity"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".view.activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activities.LoginActivity"
             android:theme="@style/AppTheme.Login">
@@ -30,15 +32,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
     </application>
-    <uses-permission android:name="android.permission.ACCES_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.ACCES_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCES_COARSE_LOCATION" />
 
 </manifest>

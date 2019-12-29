@@ -1,5 +1,6 @@
 package com.example.kotshare.view.nav.my_student_rooms;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import com.example.kotshare.data_access.StudentRoomDataAccess;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.view.SharedPreferencesAccessor;
+import com.example.kotshare.view.activities.EditStudentRoomActivity;
 import com.example.kotshare.view.recycler_views.BindLogic;
 import com.example.kotshare.view.recycler_views.GenericRecyclerViewAdapter;
 import com.example.kotshare.view.recycler_views.StudentRoomsViewHolderTypes;
 import com.example.kotshare.view.recycler_views.ViewHolderType;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +41,9 @@ public class MyStudentRoomsFragment extends Fragment {
 
     @BindView(R.id.recyclerView_myStudentRooms)
     public RecyclerView recyclerView_myStudentRooms;
+
+    @BindView(R.id.fab_addStudentRoom)
+    FloatingActionButton fab_addStudentRoom;
 
     private GenericRecyclerViewAdapter<StudentRoom> studentRoomGenericRecyclerViewAdapter;
     private SharedPreferencesAccessor sharedPreferencesAccessor = SharedPreferencesAccessor.getInstance();
@@ -88,6 +94,11 @@ public class MyStudentRoomsFragment extends Fragment {
         retrieveStudentRoomsThread.start();
         recyclerView_myStudentRooms.setLayoutManager(layoutManager);
         recyclerView_myStudentRooms.setAdapter(studentRoomGenericRecyclerViewAdapter);
+
+        fab_addStudentRoom.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), EditStudentRoomActivity.class);
+            startActivity(intent);
+        });
 
         return root;
     }
