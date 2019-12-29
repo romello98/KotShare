@@ -234,8 +234,10 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
                 Call<Void> call = ratingController.delete(userId, studentRoomId);
                 try {
                     Response<Void> response = call.execute();
-                    if(response.isSuccessful())
+                    System.out.println("coucuo");
+                    if(response.isSuccessful() || response.code() == 404)
                         addRating.start();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -256,16 +258,23 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
                 if(response.isSuccessful())
                 {
                     Rating rating = response.body();
-                    if(rating != null)
+                    if(rating != null) {
                         runOnUiThread(() ->
                         {
                             ratingBar.setRating(rating.getRatingValue());
-                            isSettingRating = false;
                         });
+                        isSettingRating = false;
+                        return;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            runOnUiThread(() ->
+            {
+                ratingBar.setRating(0);
+                isSettingRating = false;
+            });
         }).start();
     }
 

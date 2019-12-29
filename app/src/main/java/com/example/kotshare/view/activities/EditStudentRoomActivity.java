@@ -164,7 +164,7 @@ public class EditStudentRoomActivity extends AppCompatActivity {
                             if(response.isSuccessful())
                             {
                                 ViewUtils.showDialog(this, getString(R.string.success),
-                                        getString(R.string.success_student_room_added));
+                                        getString(R.string.success_student_room_updated));
                                 initSpinner();
                             }
                             else
