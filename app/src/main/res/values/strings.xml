@@ -114,5 +114,6 @@
     <string name="error_street_number_required">Le numéro de rue est requis.</string>
     <string name="select_city">Sélectionnez une ville</string>
     <string name="error_select_city">Veuillez sélectionner une ville.</string>
+    <string name="success_student_room_updated">Le kot a été mis à jour avec succès</string>
 
 </resources>
