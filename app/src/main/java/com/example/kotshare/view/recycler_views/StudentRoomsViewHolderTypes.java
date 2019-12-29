@@ -47,7 +47,7 @@ public class StudentRoomsViewHolderTypes
                 TextView title = viewHolder.itemView.findViewById(R.id.textView_studentRoomTitle);
                 TextView city = viewHolder.itemView.findViewById(R.id.textView_studentRoomPlace);
                 price.setText(String.format(context.getString(R.string.price_format),
-                        String.format(Locale.FRENCH, "%.2f", studentRoom.getMonthlyPrice())));
+                        String.format(Locale.FRENCH, "%d", studentRoom.getMonthlyPrice())));
                 title.setText(studentRoom.getTitle());
                 city.setText(studentRoom.getCity().toString());
                 cardView.setOnClickListener(view -> {

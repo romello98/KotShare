@@ -5,6 +5,7 @@ import com.example.kotshare.data_access.services.StudentRoomService;
 import com.example.kotshare.model.Like;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.model.form.StudentRoomForm;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,16 @@ public class StudentRoomDAO implements StudentRoomDataAccess
     @Override
     public ArrayList<StudentRoom> getAllLikedBy(int userId) {
         return null;
+    }
+
+    @Override
+    public Call<StudentRoom> addStudentRoom(StudentRoomForm studentRoomForm) {
+        return studentRoomService.addStudentRoom(studentRoomForm);
+    }
+
+    @Override
+    public Call<StudentRoom> updateStudentRoom(int id, StudentRoomForm studentRoomForm) {
+        return studentRoomService.updateStudentRoom(id, studentRoomForm);
     }
 
     @Override

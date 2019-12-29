@@ -9,10 +9,12 @@ import java.util.Map;
 
 import com.example.kotshare.R;
 import com.example.kotshare.controller.UserController;
+import com.example.kotshare.model.form.StudentRoomForm;
 import com.example.kotshare.model.form.UserForm;
 
 public class Validator
 {
+    private static final int MIN_NAME_LENGTH = 10;
     private UserController userController = new UserController();
 
     public static final int PASSWORD_MIN_LENGTH = 8;
@@ -24,6 +26,12 @@ public class Validator
     private static HashMap<String, Validable<String>> emailValidityConditions = new HashMap<>();
     private static HashMap<String, Validable<String>> dateValidityConditions = new HashMap<>();
     private static HashMap<String, Validable<String>> phoneNumberValidityConditions = new HashMap<>();
+    private static HashMap<String, Validable<Integer>> priceValidityConditions = new HashMap<>();
+    private static HashMap<String, Validable<String>> studentRoomNameValidityConditions =
+            new HashMap<>();
+    private static HashMap<String, Validable<Integer>> roommatesNumberValidityConditions =
+            new HashMap<>();
+
     private Context context;
 
     private Validator(Context context)
@@ -48,6 +56,15 @@ public class Validator
 
         phoneNumberValidityConditions.put(context.getString(R.string.error_phone_number_format),
                 (String phoneNumber) -> phoneNumber.matches("(((\\+|00)\\d{2}|0)\\d{9})"));
+
+        priceValidityConditions.put(context.getString(R.string.error_invalid_price),
+                (Integer price) -> price != null && price > 0);
+
+        studentRoomNameValidityConditions.put(context.getString(R.string.error_student_room_name,
+                MIN_NAME_LENGTH), (String name) -> name != null && name.length() >= MIN_NAME_LENGTH);
+
+        roommatesNumberValidityConditions.put(context.getString(R.string.error_roommates_number),
+                (Integer number) -> number != null && number >= 0);
 
     }
 
@@ -78,6 +95,16 @@ public class Validator
         return validate(dateValidityConditions, date);
     }
 
+    public HashSet<String> validatePrice(Integer price)
+    {
+        return validate(priceValidityConditions, price);
+    }
+
+    public HashSet<String> validateName(String name)
+    {
+        return validate(studentRoomNameValidityConditions, name);
+    }
+
     public ArrayList<String> validateForm(UserForm userForm, String passwordConfirmation)
     {
         ArrayList<String> errors = new ArrayList<>();
@@ -92,6 +119,25 @@ public class Validator
         errors.addAll(validatePassword(userForm.getPassword()));
         if(!arePasswordsEqual(userForm.getPassword(), passwordConfirmation))
             errors.add(context.getString(R.string.error_password_confirmation));
+        return errors;
+    }
+
+    public ArrayList<String> validateStudentRoomForm(StudentRoomForm studentRoomForm)
+    {
+        ArrayList<String> errors = new ArrayList<>();
+        errors.addAll(validatePrice(studentRoomForm.getMonthlyPrice()));
+        errors.addAll(validateName(studentRoomForm.getTitle()));
+        if(studentRoomForm.getCityId() == null)
+            errors.add(context.getString(R.string.error_select_city));
+        if(studentRoomForm.getStartRentingDate() == null)
+            errors.add(context.getString(R.string.date_min) + " : " + context.getString(R.string.error_date_format));
+        if(studentRoomForm.getEndRentingDate() == null)
+            errors.add(context.getString(R.string.date_max) + " : " + context.getString(R.string.error_date_format));
+        errors.addAll(validate(roommatesNumberValidityConditions, studentRoomForm.getNumberRoommate()));
+        if(studentRoomForm.getStreet() == null || studentRoomForm.getStreet() == "")
+            errors.add(context.getString(R.string.error_street_required));
+        if(studentRoomForm.getStreetNumber() == null || studentRoomForm.getStreetNumber() == "")
+            errors.add(context.getString(R.string.error_street_number_required));
         return errors;
     }
 

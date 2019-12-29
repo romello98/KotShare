@@ -2,11 +2,13 @@ package com.example.kotshare.data_access.services;
 
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.model.form.StudentRoomForm;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -25,7 +27,10 @@ public interface StudentRoomService
     Call<StudentRoom> getStudentRoomById(@Path("id") Integer id);
 
     @POST("StudentRoom")
-    Call<StudentRoom> addStudentRoom(@Body StudentRoom studentRoom);
+    Call<StudentRoom> addStudentRoom(@Body StudentRoomForm studentRoom);
+
+    @PUT("StudentRoom")
+    Call<StudentRoom> updateStudentRoom(@Query("id") Integer id, @Body StudentRoomForm studentRoomForm);
 
     @GET("StudentRoom/own")
     Call<PagedResult<StudentRoom>> getOwnStudentRooms(@Query("userId") Integer userId,

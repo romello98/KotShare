@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.example.kotshare.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+
 public class ViewUtils {
 
     public static ViewGroup getParent(View view) {
@@ -39,7 +41,6 @@ public class ViewUtils {
     {
         context.runOnUiThread(() -> {
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            StringBuilder stringBuilder = new StringBuilder();
 
             dialog.setTitle(title);
             dialog.setMessage(message);
@@ -60,5 +61,17 @@ public class ViewUtils {
     public static void alertNoInternetConnection(Context context, View view)
     {
         Snackbar.make(view, context.getString(R.string.error_connection), Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void showErrors(Activity context, ArrayList<String> errors)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        String dialogTitle = context.getString(R.string.errors_title);
+
+        for(int i = 0; i < errors.size() - 1; i++)
+            stringBuilder.append(errors.get(i)).append("\n\n");
+        stringBuilder.append(errors.get(errors.size() - 1));
+
+        showDialog(context, context.getString(R.string.errors_title), stringBuilder.toString());
     }
 }

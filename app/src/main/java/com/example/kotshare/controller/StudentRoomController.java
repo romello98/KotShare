@@ -4,6 +4,7 @@ import com.example.kotshare.data_access.StudentRoomDAO;
 import com.example.kotshare.data_access.StudentRoomDataAccess;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.StudentRoom;
+import com.example.kotshare.model.form.StudentRoomForm;
 
 import java.util.ArrayList;
 
@@ -41,5 +42,15 @@ public class StudentRoomController
                                                                   Integer pageSize)
     {
         return studentRoomDataAccess.getFavoriteStudentRooms(userId, pageIndex, pageSize);
+    }
+
+    public Call<StudentRoom> addStudentRoom(StudentRoomForm studentRoomForm)
+    {
+        return studentRoomDataAccess.addStudentRoom(studentRoomForm);
+    }
+
+    public Call<StudentRoom> updateStudentRoom(int id, StudentRoomForm studentRoomForm)
+    {
+        return studentRoomDataAccess.updateStudentRoom(id, studentRoomForm);
     }
 }

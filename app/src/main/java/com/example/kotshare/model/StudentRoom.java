@@ -10,7 +10,7 @@ public class StudentRoom
     private Integer id;
     private String title;
     private String description;
-    private Double monthlyPrice;
+    private Integer monthlyPrice;
     @SerializedName("lat")
     private Double latitude;
     @SerializedName("long")
@@ -22,7 +22,7 @@ public class StudentRoom
     private Integer numberRoommate;
     private Boolean isHidden;
     private Date startRentingDate;
-    private Date endRatingDate;
+    private Date endRentingDate;
     private City city;
     private String street;
     private String streetNumber;
@@ -38,7 +38,7 @@ public class StudentRoom
 
     public StudentRoom() {}
 
-    public StudentRoom(Integer id, String title, Double monthlyPrice, User user)
+    public StudentRoom(Integer id, String title, Integer monthlyPrice, User user)
     {
         setId(id);
         setTitle(title);
@@ -75,11 +75,11 @@ public class StudentRoom
         this.title = title;
     }
 
-    public Double getMonthlyPrice() {
+    public Integer getMonthlyPrice() {
         return monthlyPrice;
     }
 
-    public void setMonthlyPrice(Double monthlyPrice) {
+    public void setMonthlyPrice(Integer monthlyPrice) {
         this.monthlyPrice = monthlyPrice;
     }
 
@@ -147,12 +147,12 @@ public class StudentRoom
         this.startRentingDate = startRentingDate;
     }
 
-    public Date getEndRatingDate() {
-        return endRatingDate;
+    public Date getEndRentingDate() {
+        return endRentingDate;
     }
 
-    public void setEndRatingDate(Date endRatingDate) {
-        this.endRatingDate = endRatingDate;
+    public void setEndRentingDate(Date endRentingDate) {
+        this.endRentingDate = endRentingDate;
     }
 
     public City getCity() {
