@@ -252,10 +252,10 @@ public class EditStudentRoomActivity extends AppCompatActivity {
             editText_studentRoomEndDate.setText(simpleDateFormat.format(studentRoom.getEndRentingDate()));
         if(cityPosition != -1)
             spinner_studentRoomPlace.setSelection(cityPosition);
-        switch_wifi.setSelected(studentRoom.getFreeWifi());
-        switch_bathroom.setSelected(studentRoom.getPersonnalBathroom());
-        switch_kitchen.setSelected(studentRoom.getPersonnalKitchen());
-        switch_garden.setSelected(studentRoom.getHasGarden());
+        switch_wifi.setChecked(studentRoom.getFreeWifi());
+        switch_bathroom.setChecked(studentRoom.getPersonnalBathroom());
+        switch_kitchen.setChecked(studentRoom.getPersonnalKitchen());
+        switch_garden.setChecked(studentRoom.getHasGarden());
     }
 
     private String emptyIfNull(Integer integer)
