@@ -76,6 +76,7 @@ public class SignupFragment extends Fragment
         userForm.setSchoolId(selectedSchool == null ? null : selectedSchool.getId());
         userForm.setFirstName(firstName.getText().toString());
         userForm.setLastName(lastName.getText().toString());
+        userForm.setPasswordConfirmation(passwordConfirmation.getText().toString());
         return userForm;
     }
 

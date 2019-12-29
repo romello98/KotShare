@@ -2,21 +2,13 @@ package com.example.kotshare.model.form;
 
 public class UserForm
 {
-    private Integer id;
     private String email;
     private String password;
+    private String passwordConfirmation;
     private String phoneNumber;
     private String lastName;
     private String firstName;
     private Integer schoolId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -64,5 +56,13 @@ public class UserForm
 
     public void setSchoolId(Integer schoolId) {
         this.schoolId = schoolId;
+    }
+
+    public String getPasswordConfirmation() {
+        return passwordConfirmation;
+    }
+
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        this.passwordConfirmation = passwordConfirmation;
     }
 }

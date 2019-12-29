@@ -105,7 +105,7 @@ public class Validator
         return validate(studentRoomNameValidityConditions, name);
     }
 
-    public ArrayList<String> validateForm(UserForm userForm, String passwordConfirmation)
+    public ArrayList<String> validateForm(UserForm userForm)
     {
         ArrayList<String> errors = new ArrayList<>();
         if(userForm.getFirstName().isEmpty())
@@ -117,7 +117,7 @@ public class Validator
         errors.addAll(validateEmail(userForm.getEmail()));
         errors.addAll(validatePhoneNumber(userForm.getPhoneNumber()));
         errors.addAll(validatePassword(userForm.getPassword()));
-        if(!arePasswordsEqual(userForm.getPassword(), passwordConfirmation))
+        if(!arePasswordsEqual(userForm.getPassword(), userForm.getPasswordConfirmation()))
             errors.add(context.getString(R.string.error_password_confirmation));
         return errors;
     }

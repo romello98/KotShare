@@ -200,8 +200,7 @@ public class LoginActivity extends AppCompatActivity {
                Call<Boolean> call = userController.emailExists(userForm.getEmail());
                 try {
                     Response<Boolean> response = call.execute();
-                    errors = Validator.getInstance(LoginActivity.this)
-                            .validateForm(userForm, signupFragment.getPasswordConfirmation());
+                    errors = Validator.getInstance(LoginActivity.this).validateForm(userForm);
 
                     if(response.isSuccessful())
                     {
