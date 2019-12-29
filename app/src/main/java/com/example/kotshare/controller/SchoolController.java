@@ -5,6 +5,8 @@ import com.example.kotshare.data_access.SchoolDataAccess;
 import com.example.kotshare.model.PagedResult;
 import com.example.kotshare.model.School;
 
+import java.util.List;
+
 import retrofit2.Call;
 
 public class SchoolController
@@ -16,9 +18,9 @@ public class SchoolController
         schoolDataAccess = SchoolDAO.getInstance();
     }
 
-    public Call<PagedResult<School>> getAllSchools(Integer pageIndex, Integer pageSize)
+    public Call<List<School>> getAll()
     {
-        return schoolDataAccess.getAllSchools(pageIndex, pageSize);
+        return schoolDataAccess.getAll();
     }
 
 }

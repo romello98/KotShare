@@ -20,6 +20,7 @@ import com.example.kotshare.utils.ViewUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,10 +102,9 @@ public class SignupFragment extends Fragment
         }
 
         Thread loadSpinnerThread = new Thread(() -> {
-            Call<PagedResult<School>> call = schoolController.getAllSchools(null,
-                    100);
+            Call<List<School>> call = schoolController.getAll();
             try {
-                Response<PagedResult<School>> response = call.execute();
+                Response<List<School>> response = call.execute();
                 if(response.isSuccessful())
                 {
                     School defaultChoice = new School();
@@ -113,7 +113,7 @@ public class SignupFragment extends Fragment
 
                     defaultChoice.setName(getString(R.string.select_school));
                     schools.add(defaultChoice);
-                    schools.addAll(response.body().getItems());
+                    schools.addAll(response.body());
                     adapter = new ArrayAdapter<>(SignupFragment.this.getContext(),
                             android.R.layout.simple_spinner_item, schools.toArray(new School[0]));
 
