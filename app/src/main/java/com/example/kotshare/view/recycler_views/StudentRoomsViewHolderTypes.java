@@ -96,7 +96,7 @@ public class StudentRoomsViewHolderTypes
                                     call.enqueue(new Callback() {
                                         @Override
                                         public void onResponse(Call call, Response response) {
-                                            if(response.code() == 200) {
+                                            if(response.isSuccessful()) {
                                                 likeButton.setImageDrawable(favoriteEmpty);
                                                 studentRoom.setLiked(false);
                                             }
