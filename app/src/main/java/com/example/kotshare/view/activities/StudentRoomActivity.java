@@ -144,7 +144,7 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         characteristics.add(new CharacteristicStudentRoom(
                 R.drawable.ic_coin, String.format(
                         getString(R.string.price_format),
-                        String.format(Locale.FRENCH, "%.2f", studentRoom.getMonthlyPrice())
+                        String.format(Locale.FRENCH, "%d", studentRoom.getMonthlyPrice())
                 )
         ));
 
