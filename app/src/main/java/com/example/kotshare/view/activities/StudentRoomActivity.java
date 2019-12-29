@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -57,6 +61,12 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
     @BindView(R.id.imageSlider)
     SliderView sliderStudentRoom;
 
+    @BindView(R.id.phone)
+    ImageView phone;
+
+    @BindView(R.id.mail)
+    ImageView mail;
+
     @BindView(R.id.ratingStars)
     RatingBar ratingBar;
 
@@ -70,11 +80,6 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
     private StudentRoomController studentRoomController;
     private RatingController ratingController;
     private Runnable getAllRatingsAction;
-
-    /*
-    @BindView(R.id.phone)
-    ImageView phoneButton;
-    */
 
     @BindView(R.id.informationsStudentRoom)
     RecyclerView characteristicsRecyclerView;
@@ -174,6 +179,29 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         // Google map
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAPI);
         mapFragment.getMapAsync(this);
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent();
+                callIntent.setAction(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + studentRoom.getUser().getPhoneNumber()));
+                startActivity(callIntent);
+            }
+        });
+
+        mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL  , studentRoom.getUser().getEmail());
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "KotShare - " + studentRoom.getTitle());
+
+                emailIntent.setType("text/plain");
+                startActivity(emailIntent);
+            }
+        });
+
     }
 
     public void loadRatingBar()
@@ -298,24 +326,4 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         super.onBackPressed();
         return true;
     }
-
-    /*
-    @Override
-    public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-
-        Intent callIntent = new Intent();
-        callIntent.setAction(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:123456789"));
-
-
-
-        phoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(callIntent);
-            }
-        });
-        return parent;
-    }
-    */
 }
