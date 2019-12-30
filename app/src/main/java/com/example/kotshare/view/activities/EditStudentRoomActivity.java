@@ -1,9 +1,14 @@
 package com.example.kotshare.view.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,10 +22,12 @@ import com.example.kotshare.R;
 import com.example.kotshare.controller.CityController;
 import com.example.kotshare.controller.StudentRoomController;
 import com.example.kotshare.model.City;
+import com.example.kotshare.model.Photo;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.model.form.StudentRoomForm;
 import com.example.kotshare.utils.Validator;
 import com.example.kotshare.utils.ViewUtils;
+import com.example.kotshare.view.PhotosManager;
 import com.example.kotshare.view.SharedPreferencesAccessor;
 
 import java.io.IOException;
@@ -37,6 +44,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class EditStudentRoomActivity extends AppCompatActivity {
+
+    private static final int PICK_IMAGE = 1;
+
 
     @BindView(R.id.editText_studentRoomName)
     EditText editText_studentRoomName;
@@ -71,6 +81,9 @@ public class EditStudentRoomActivity extends AppCompatActivity {
     @BindView(R.id.editText_studentRoomStreet)
     EditText editText_studentRoomStreet;
 
+    @BindView(R.id.button_selectPhotos)
+    Button button_selectPhotos;
+
     @BindView(R.id.switch_wifi)
     Switch switch_wifi;
 
@@ -83,10 +96,14 @@ public class EditStudentRoomActivity extends AppCompatActivity {
     @BindView(R.id.switch_kitchen)
     Switch switch_kitchen;
 
+
     private City[] cities;
 
     private StudentRoomController studentRoomController;
     private CityController cityController;
+    private Uri[] uploadedPhotosURIs;
+    private boolean photosChanged = false;
+    private int studentRoomId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +113,9 @@ public class EditStudentRoomActivity extends AppCompatActivity {
         cityController = new CityController();
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        int studentRoomId = intent.getIntExtra(getString(R.string.STUDENT_ROOM_ID), -1);
+        studentRoomId = intent.getIntExtra(getString(R.string.STUDENT_ROOM_ID), -1);
 
-        if(studentRoomId == -1)
-        {
+        if (studentRoomId == -1) {
             setTitle(getString(R.string.add_student_room));
             button_deleteStudentRoom.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 0));
             new Thread(this::initSpinner).start();
@@ -108,29 +124,64 @@ public class EditStudentRoomActivity extends AppCompatActivity {
                 ArrayList<String> errors = Validator.getInstance(this)
                         .validateStudentRoomForm(studentRoomForm);
 
-                if(!errors.isEmpty())
-                {
+                if (!errors.isEmpty()) {
                     ViewUtils.showErrors(this, errors);
-                }
-                else
-                {
+                } else {
                     new Thread(() -> {
                         Call<StudentRoom> call = studentRoomController.addStudentRoom(studentRoomForm);
                         try {
                             Response<StudentRoom> response = call.execute();
-                            if(response.isSuccessful())
-                            {
+                            if (response.isSuccessful()) {
+                                if(photosChanged)
+                                    updatePhotos();
                                 ViewUtils.showDialog(this, getString(R.string.success),
                                         getString(R.string.success_student_room_added));
-                            }
-                            else
-                            {
+                            } else {
                                 ViewUtils.showDialog(this, getString(R.string.error_request),
                                         getString(R.string.error_request_client));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                            if(ViewUtils.isConnected(this))
+                            if (ViewUtils.isConnected(this))
+                                ViewUtils.showDialog(this, getString(R.string.error_unknown),
+                                        getString(R.string.error_unknown_happened));
+                            else
+                                ViewUtils.alertNoInternetConnection(this, view);
+                        }
+                    }).start();
+                }
+            });
+        } else {
+            setTitle(getString(R.string.edit_student_room));
+            getStudentRoom(studentRoomId);
+            button_addOrEditStudentRoom.setText(getString(R.string.edit_student_room));
+            button_addOrEditStudentRoom.setOnClickListener(view -> {
+                StudentRoomForm studentRoomForm = buildForm();
+                ArrayList<String> errors = Validator.getInstance(this)
+                        .validateStudentRoomForm(studentRoomForm);
+
+                if (!errors.isEmpty()) {
+                    ViewUtils.showErrors(this, errors);
+                } else {
+                    new Thread(() -> {
+                        Call<StudentRoom> call = studentRoomController.updateStudentRoom(studentRoomId,
+                                studentRoomForm);
+                        try {
+                            Response<StudentRoom> response = call.execute();
+                            if (response.isSuccessful()) {
+                                if (photosChanged) {
+                                    updatePhotos();
+                                }
+                                ViewUtils.showDialog(this, getString(R.string.success),
+                                        getString(R.string.success_student_room_updated));
+                                initSpinner();
+                            } else {
+                                ViewUtils.showDialog(this, getString(R.string.error_request),
+                                        getString(R.string.error_request_client));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            if (ViewUtils.isConnected(this))
                                 ViewUtils.showDialog(this, getString(R.string.error_unknown),
                                         getString(R.string.error_unknown_happened));
                             else
@@ -140,49 +191,62 @@ public class EditStudentRoomActivity extends AppCompatActivity {
                 }
             });
         }
-        else
-        {
-            setTitle(getString(R.string.edit_student_room));
-            getStudentRoom(studentRoomId);
-            button_addOrEditStudentRoom.setText(getString(R.string.edit_student_room));
-            button_addOrEditStudentRoom.setOnClickListener(view -> {
-                StudentRoomForm studentRoomForm = buildForm();
-                ArrayList<String> errors = Validator.getInstance(this)
-                        .validateStudentRoomForm(studentRoomForm);
 
-                if(!errors.isEmpty())
-                {
-                    ViewUtils.showErrors(this, errors);
-                }
-                else
-                {
-                    new Thread(() -> {
-                        Call<StudentRoom> call = studentRoomController.updateStudentRoom(studentRoomId,
-                                studentRoomForm);
-                        try {
-                            Response<StudentRoom> response = call.execute();
-                            if(response.isSuccessful())
-                            {
-                                ViewUtils.showDialog(this, getString(R.string.success),
-                                        getString(R.string.success_student_room_updated));
-                                initSpinner();
+        initPhotosButton();
+    }
+
+    private void initPhotosButton() {
+        button_selectPhotos.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+        });
+    }
+
+    private void updatePhotos() throws IOException {
+            PhotosManager.getInstance(this).updatePhotos(studentRoomId == -1,
+                    studentRoomId, uploadedPhotosURIs);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case PICK_IMAGE:
+                if (resultCode == Activity.RESULT_OK && null != data) {
+                    try {
+                        // Get the Image from data
+                        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                        ArrayList<String> imagesEncodedList = new ArrayList<>();
+                        if(data.getData()!=null){
+                            Uri singleImageUri = data.getData();
+                            uploadedPhotosURIs = new Uri[1];
+                            uploadedPhotosURIs[0] = singleImageUri;
+                            photosChanged = true;
+                        } else {
+                            ClipData clipData = data.getClipData();
+                            if (clipData != null) {
+                                int clipSize = clipData.getItemCount();
+                                if(clipSize > 0) {
+                                    uploadedPhotosURIs = new Uri[clipSize];
+                                    for (int i = 0; i < clipSize; i++)
+                                        uploadedPhotosURIs[i] = clipData.getItemAt(i).getUri();
+                                    photosChanged = true;
+                                }
                             }
-                            else
-                            {
-                                ViewUtils.showDialog(this, getString(R.string.error_request),
-                                        getString(R.string.error_request_client));
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            if(ViewUtils.isConnected(this))
-                                ViewUtils.showDialog(this, getString(R.string.error_unknown),
-                                        getString(R.string.error_unknown_happened));
-                            else
-                                ViewUtils.alertNoInternetConnection(this, view);
                         }
-                    }).start();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                                .show();
+                    }
+                } else {
+                    Toast.makeText(this, "You haven't picked Image",
+                            Toast.LENGTH_LONG).show();
                 }
-            });
+                break;
         }
     }
 
@@ -336,4 +400,5 @@ public class EditStudentRoomActivity extends AppCompatActivity {
         super.onBackPressed();
         return true;
     }
+
 }

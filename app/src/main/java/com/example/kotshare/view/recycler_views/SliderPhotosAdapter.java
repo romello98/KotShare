@@ -8,14 +8,21 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.kotshare.R;
+import com.example.kotshare.model.Photo;
+import com.example.kotshare.view.PhotosManager;
 import com.smarteist.autoimageslider.SliderViewAdapter;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class SliderPhotosAdapter extends SliderViewAdapter<SliderPhotosAdapter.SliderAdapterVH> {
 
     private Context context;
+    private ArrayList<Photo> photos;
 
-    public SliderPhotosAdapter(Context context) {
+    public SliderPhotosAdapter(Context context, ArrayList<Photo> photos) {
         this.context = context;
+        this.photos = photos;
     }
 
     @Override
@@ -26,37 +33,19 @@ public class SliderPhotosAdapter extends SliderViewAdapter<SliderPhotosAdapter.S
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
+        Photo photo = photos.get(position);
 
-        switch (position) {
-            case 0:
-                Glide.with(viewHolder.imageViewBackground)
-                        .load("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 1:
-                Glide.with(viewHolder.imageViewBackground)
-                        .load("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            case 2:
-                Glide.with(viewHolder.imageViewBackground)
-                        .load("https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-            default:
-                Glide.with(viewHolder.imageViewBackground)
-                        .load("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
-                        .into(viewHolder.imageViewBackground);
-                break;
-
-        }
+        Glide.with(viewHolder.imageViewBackground)
+                .load(PhotosManager.getInstance(context).getBaseUrl(photo.getStudentRoomId(), photo))
+                .centerCrop()
+                .into(viewHolder.imageViewBackground);
 
     }
 
     @Override
     public int getCount() {
         //slider view count could be dynamic size
-        return 4;
+        return photos.size();
     }
 
     class SliderAdapterVH extends SliderViewAdapter.ViewHolder {

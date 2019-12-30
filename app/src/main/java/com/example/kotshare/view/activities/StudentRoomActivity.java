@@ -135,7 +135,8 @@ public class StudentRoomActivity extends AppCompatActivity implements OnMapReady
         else
             textView_description.setText(studentRoom.getDescription());
 
-        sliderStudentRoom.setSliderAdapter(new SliderPhotosAdapter(StudentRoomActivity.this));
+        sliderStudentRoom.setSliderAdapter(new SliderPhotosAdapter(StudentRoomActivity.this,
+                studentRoom.getPhoto()));
         sliderStudentRoom.startAutoCycle();
         sliderStudentRoom.setIndicatorAnimation(IndicatorAnimations.WORM);
         sliderStudentRoom.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);

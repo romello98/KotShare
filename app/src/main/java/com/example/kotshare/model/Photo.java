@@ -6,9 +6,18 @@ public class Photo
     private Integer version;
     private String name;
     private String format;
+    private Integer studentRoomId;
     private StudentRoom studentRoom;
 
     public Photo(){}
+
+    public Integer getStudentRoomId() {
+        return studentRoomId;
+    }
+
+    public void setStudentRoomId(Integer studentRoomId) {
+        this.studentRoomId = studentRoomId;
+    }
 
     public Photo(Integer id, Integer version, String name, String format,
                  StudentRoom studentRoom) {

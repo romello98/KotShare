@@ -2,21 +2,26 @@ package com.example.kotshare.view.recycler_views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
 import com.example.kotshare.R;
 import com.example.kotshare.controller.LikeController;
 import com.example.kotshare.controller.StudentRoomController;
+import com.example.kotshare.model.Photo;
 import com.example.kotshare.model.StudentRoom;
 import com.example.kotshare.model.User;
+import com.example.kotshare.view.PhotosManager;
 import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.view.activities.EditStudentRoomActivity;
 import com.example.kotshare.view.activities.StudentRoomActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -43,6 +48,7 @@ public class StudentRoomsViewHolderTypes
         commonBind = (studentRoom, viewHolder) -> {
                 Context context = viewHolder.itemView.getContext();
                 CardView cardView = viewHolder.itemView.findViewById(R.id.cardview_studentRoomItem);
+                ImageView backgroundImage = viewHolder.itemView.findViewById(R.id.imageView_photoStudentRoom);
                 TextView price = viewHolder.itemView.findViewById(R.id.textView_studentRoomPrice);
                 TextView title = viewHolder.itemView.findViewById(R.id.textView_studentRoomTitle);
                 TextView city = viewHolder.itemView.findViewById(R.id.textView_studentRoomPlace);
@@ -50,6 +56,15 @@ public class StudentRoomsViewHolderTypes
                         String.format(Locale.FRENCH, "%d", studentRoom.getMonthlyPrice())));
                 title.setText(studentRoom.getTitle());
                 city.setText(studentRoom.getCity().toString());
+
+                if(studentRoom.getPhoto() != null && studentRoom.getPhoto().size() > 0) {
+                    Photo firstPhoto = studentRoom.getPhoto().get(0);
+                    Glide.with(context).load(PhotosManager.getInstance(context)
+                            .getBaseUrl(studentRoom.getId(), firstPhoto))
+                            .centerCrop()
+                            .into(backgroundImage);
+                }
+
                 cardView.setOnClickListener(view -> {
                     Intent intent = new Intent(context, StudentRoomActivity.class);
                     if(studentRoom.getId() != null) {

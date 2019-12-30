@@ -101,8 +101,8 @@
     <string name="edit_student_room">Modifier un kot</string>
     <string name="student_room_name">Nom</string>
     <string name="number_of_roommates">Nombre de colocataires</string>
-    <string name="photos">Photos</string>
-    <string name="select_photos">Sélectionner des photos</string>
+    <string name="photo">Photos</string>
+    <string name="select_photos">Sélectionner des photo</string>
     <string name="delete_student_room">Supprimer ce kot</string>
     <string name="error_invalid_price">Prix entré invalide</string>
     <string name="error_student_room_name">Le nom de l\'annonce doit faire au moins %1$d caractère(s)</string>

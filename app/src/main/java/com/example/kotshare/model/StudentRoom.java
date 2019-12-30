@@ -2,6 +2,7 @@ package com.example.kotshare.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -29,7 +30,7 @@ public class StudentRoom
     private User user;
     private boolean isLiked;
     private HashSet<Like> likes = new HashSet<>();
-    private HashSet<Photo> photos = new HashSet<>();
+    private ArrayList<Photo> photo = new ArrayList<>();
     private HashSet<UserStudentRoomRating> userStudentRoomRatings = new HashSet<>();
 
     public User getUser() {
@@ -187,12 +188,12 @@ public class StudentRoom
         this.likes = likes;
     }
 
-    public HashSet<Photo> getPhotos() {
-        return photos;
+    public ArrayList<Photo> getPhoto() {
+        return photo;
     }
 
-    public void setPhotos(HashSet<Photo> photos) {
-        this.photos = photos;
+    public void setPhoto(ArrayList<Photo> photo) {
+        this.photo = photo;
     }
 
     public HashSet<UserStudentRoomRating> getUserStudentRoomRatings() {
