@@ -22,6 +22,8 @@ public class SliderPhotosAdapter extends SliderViewAdapter<SliderPhotosAdapter.S
 
     public SliderPhotosAdapter(Context context, ArrayList<Photo> photos) {
         this.context = context;
+        if(photos == null || photos.isEmpty())
+            photos.add(new Photo(-1, null, null, null, null));
         this.photos = photos;
     }
 
@@ -35,10 +37,14 @@ public class SliderPhotosAdapter extends SliderViewAdapter<SliderPhotosAdapter.S
     public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
         Photo photo = photos.get(position);
 
-        Glide.with(viewHolder.imageViewBackground)
-                .load(PhotosManager.getInstance(context).getBaseUrl(photo.getStudentRoomId(), photo))
-                .centerCrop()
-                .into(viewHolder.imageViewBackground);
+        if(photo.getId() == -1)
+            Glide.with(context).load(R.mipmap.student_room_default)
+                    .centerCrop().into(viewHolder.imageViewBackground);
+        else {
+            String url = PhotosManager.getInstance(context).getBaseUrl(photo.getStudentRoomId(), photo);
+            Glide.with(viewHolder.imageViewBackground).load(url)
+                    .centerCrop().into(viewHolder.imageViewBackground);
+        }
 
     }
 

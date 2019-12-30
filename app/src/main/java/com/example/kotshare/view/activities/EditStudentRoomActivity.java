@@ -104,6 +104,7 @@ public class EditStudentRoomActivity extends AppCompatActivity {
     private Uri[] uploadedPhotosURIs;
     private boolean photosChanged = false;
     private int studentRoomId;
+    private StudentRoom studentRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,8 +264,14 @@ public class EditStudentRoomActivity extends AppCompatActivity {
         studentRoomForm.setHasGarden(switch_garden.isChecked());
         studentRoomForm.setPersonnalBathroom(switch_bathroom.isChecked());
         studentRoomForm.setPersonnalKitchen(switch_kitchen.isChecked());
-        studentRoomForm.setLat(50.8466);
-        studentRoomForm.setLong(4.3528);
+        if(studentRoom == null && studentRoomId == -1) {
+            //Bruxelles
+            studentRoomForm.setLat(50.8466);
+            studentRoomForm.setLong(4.3528);
+        } else {
+            studentRoomForm.setLat(studentRoom.getLat());
+            studentRoomForm.setLong(studentRoomForm.getLong());
+        }
         studentRoomForm.setUserId(SharedPreferencesAccessor.getInstance().getUser().getId());
         String price = editText_studentRoomPrice.getText().toString();
         studentRoomForm.setMonthlyPrice(!price.matches("\\d+") ? null :
@@ -285,7 +292,7 @@ public class EditStudentRoomActivity extends AppCompatActivity {
                 Response<StudentRoom> response = call.execute();
                 if(response.isSuccessful())
                 {
-                    StudentRoom studentRoom = response.body();
+                    studentRoom = response.body();
                     initSpinner();
                     runOnUiThread(() -> this.fetchForm(studentRoom));
                     return;
