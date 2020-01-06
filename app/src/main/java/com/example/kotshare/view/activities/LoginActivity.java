@@ -24,6 +24,7 @@ import com.example.kotshare.view.SharedPreferencesAccessor;
 import com.example.kotshare.utils.ViewUtils;
 import com.example.kotshare.view.fragments.LoginFragment;
 import com.example.kotshare.view.fragments.SignupFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,7 +83,10 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
-                    else loadLoginView();
+                    else
+                    {
+                        loadLoginView();
+                    }
                 }
 
                 @Override
@@ -130,7 +134,14 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         } else {
-                            Log.i("app", response.message());
+                            if(response.code() == 401 || response.code() == 404)
+                            {
+                                Snackbar.make(view, getString(R.string.login_failed),
+                                        Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                Snackbar.make(view, getString(R.string.error_request),
+                                        Snackbar.LENGTH_SHORT).show();
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -157,7 +168,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        Log.i("app", response.message());
+                        if(response.code() == 400 || response.code() == 401)
+                        {
+                            Snackbar.make(view, getString(R.string.login_failed),
+                                    Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(view, getString(R.string.error_request),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
